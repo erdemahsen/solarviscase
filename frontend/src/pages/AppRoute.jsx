@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import axios from "axios";
 import InputPageCard from './components/InputPageCard';
 import OutputPageCard from './components/OutputPageCard';
-import { simulateBackendCalculation } from './mockBackend';
+
 
 
 

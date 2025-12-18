@@ -29,8 +29,8 @@ def home():
 @app.post("/api/calculate")
 def app_calculate(payload: CalculateRequest): 
     # we can get the post payload
-    print(payload.formData)      
-    print(payload.calculations)
+    # print(payload.formData)      
+    # print(payload.calculations)
 
     # Mock calculation result here 
     return {
