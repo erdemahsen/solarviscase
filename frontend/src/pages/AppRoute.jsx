@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import InputPageCard from './components/InputPageCard';
 import OutputPageCard from './components/OutputPageCard';
+import { simulateBackendCalculation } from './mockBackend'; // Import the mock
 
 
 
@@ -42,7 +43,22 @@ const mockConfig = {
 function AppRoute() {
     const [currentPageIndex, setCurrentPageIndex] = useState(0)
 
-    
+    const [isLoading, setIsLoading] = useState(false);
+    const isLastInputPage = currentPageIndex === mockConfig.numInputPages - 1;
+
+    // 1. Create a single state object for all inputs
+    const [formData, setFormData] = useState({});
+
+    const [backendResults, setBackendResults] = useState(null);
+
+    // 2. Create a generic handler that updates the specific key (X, Y, or Z)
+    const handleInputChange = (name, value) => {
+        console.log(formData)
+        setFormData(prev => ({
+            ...prev,
+            [name]: value // Dynamically update the key based on input name
+        }));
+    };
 
     function prevPage(){
         if(currentPageIndex > 0 ){
@@ -50,16 +66,67 @@ function AppRoute() {
         }
     }
 
-    function nextPage(){
-        if(currentPageIndex < mockConfig.numInputPages){
-            setCurrentPageIndex(currentPageIndex+1)
+    async function nextPage() {
+        if (currentPageIndex < mockConfig.numInputPages) {
+            
+            // If we are about to go to the Output Page, call the API (Mock)
+            if (isLastInputPage) {
+                setIsLoading(true); // Start loading spinner
+                // Only move to next page if successful
+                setCurrentPageIndex(currentPageIndex + 1);
+                
+                try {
+                    // CALL THE MOCK SERVICE
+                    // Pass formData (inputs) and mockConfig (formulas)
+                    const response = await simulateBackendCalculation(formData, mockConfig.calculations);
+                    
+                    console.log("Results received:", response.data);
+                    setBackendResults(response.data.results);
+                    
+                    // Only move to next page if successful
+                    setCurrentPageIndex(currentPageIndex + 1);
+                } catch (error) {
+                    console.log(error)
+                    alert("Backend failed!");
+                } finally {
+                    setIsLoading(false); // Stop loading spinner
+                }
+            } else {
+                // Normal page navigation
+                setCurrentPageIndex(currentPageIndex + 1);
+            }
         }
     }
 
+    // Example: This is where you would send your request later
+    useEffect(() => {
+        if (currentPageIndex === mockConfig.numInputPages) {
+            console.log("Wizard finished! Sending data:", formData);
+            // sendToBackend(formData);
+        }
+    }, [currentPageIndex, formData]);
+
     return (
         <div>
-            {currentPageIndex < mockConfig.numInputPages && <InputPageCard currentPage = {mockConfig.pages[currentPageIndex]} nextPage={nextPage} prevPage={prevPage}/>}
-            {currentPageIndex == mockConfig.numInputPages && <OutputPageCard outputPage={mockConfig.outputPage} nextPage={nextPage} prevPage={prevPage} calculations={mockConfig.calculations}/>}
+            {currentPageIndex < mockConfig.numInputPages && 
+                <InputPageCard 
+                    currentPage = {mockConfig.pages[currentPageIndex]} 
+                    nextPage={nextPage} 
+                    prevPage={prevPage} 
+                    formData={formData} 
+                    handleInputChange={handleInputChange}
+                />
+            }
+            {currentPageIndex === mockConfig.numInputPages && (
+                isLoading ? <p>Calculating...</p> : 
+                <OutputPageCard 
+                    outputPage={mockConfig.outputPage} 
+                    nextPage={nextPage} 
+                    prevPage={prevPage} 
+                    // Pass the BACKEND results, not the form data
+                    results={backendResults} 
+                />
+            )}
             
         </div>
         
