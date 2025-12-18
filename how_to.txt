@@ -1,0 +1,14 @@
+For backend : 
+python3 -m venv myenv
+
+source myenv/bin/activate
+
+pip3 install fastapi
+pip3 install uvicorn
+
+cd backend
+uvicorn main:app --reload 
+
+For frontend :
+cd frontend
+npm run dev

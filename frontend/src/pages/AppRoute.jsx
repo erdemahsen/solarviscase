@@ -1,53 +1,26 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import axios from "axios";
 import InputPageCard from './components/InputPageCard';
 import OutputPageCard from './components/OutputPageCard';
-import { simulateBackendCalculation } from './mockBackend'; // Import the mock
+import { simulateBackendCalculation } from './mockBackend';
 
-const mockConfig = {
-  numInputPages: 2,
-  pages: [
-    {
-      id: 1,
-      title: "Energy Basics",
-      description: "Tell us about your current usage.",
-      image: "https://example.com/solar-1.jpg",
-      inputs: [
-        { name: "X", placeholder: "Monthly Bill ($)", type: "number" }
-      ]
-    },
-    {
-      id: 2,
-      title: "Home Details",
-      description: "Dimensions and location.",
-      image: "https://example.com/solar-2.jpg",
-      inputs: [
-        { name: "Y", placeholder: "Roof Area (sqm)", type: "number" },
-        { name: "Z", placeholder: "Sunlight Hours", type: "number" }
-      ]
-    }
-  ],
-  calculations: [
-    { outputName: "A", formula: "(Y * 100000 + Z * 50000) - (X * 10000)", unit: "kWh" },
-    { outputName: "B", formula: "A / 200", unit: "USD" }
-  ],
-  outputPage: {
-    title: "Your Solar Potential",
-    description: "Based on your inputs, here is your estimate.",
-    image: "https://example.com/result.jpg"
-  }
-};
+
+
+const baseURL = "http://127.0.0.1:8000/" // last / can be a bad practice, I may remove that
 
 
 function AppRoute() {
     const [currentPageIndex, setCurrentPageIndex] = useState(0)
+    const [mockConfig, setMockConfig] = useState(null)
 
     const [isLoading, setIsLoading] = useState(false);
-    const isLastInputPage = currentPageIndex === mockConfig.numInputPages - 1;
 
     // 1. Create a single state object for all inputs
     const [formData, setFormData] = useState({});
 
     const [backendResults, setBackendResults] = useState(null);
+
+    const hasFetchedConfig = useRef(false);
 
     // 2. Create a generic handler that updates the specific key (X, Y, or Z)
     const handleInputChange = (name, value) => {
@@ -68,21 +41,23 @@ function AppRoute() {
         if (currentPageIndex < mockConfig.numInputPages) {
             
             // If we are about to go to the Output Page, call the API (Mock)
-            if (isLastInputPage) {
+            if (currentPageIndex === mockConfig.numInputPages - 1) {
                 setIsLoading(true); // Start loading spinner
                 // Only move to next page if successful
-                setCurrentPageIndex(currentPageIndex + 1);
+                setCurrentPageIndex(prev => prev + 1);
                 
                 try {
-                    // CALL THE MOCK SERVICE
-                    // Pass formData (inputs) and mockConfig (formulas)
-                    const response = await simulateBackendCalculation(formData, mockConfig.calculations);
+
+                    const payload = {
+                        formData: formData,
+                        calculations: mockConfig.calculations
+                    }
+
+                    const response = await axios.post(`${baseURL}api/calculate`, payload);
                     
                     console.log("Results received:", response.data);
                     setBackendResults(response.data.results);
                     
-                    // Only move to next page if successful
-                    setCurrentPageIndex(currentPageIndex + 1);
                 } catch (error) {
                     console.log(error)
                     alert("Backend failed!");
@@ -91,18 +66,46 @@ function AppRoute() {
                 }
             } else {
                 // Normal page navigation
-                setCurrentPageIndex(currentPageIndex + 1);
+                setCurrentPageIndex(prev => prev + 1);
             }
         }
     }
 
-    // Example: This is where you would send your request later
     useEffect(() => {
-        if (currentPageIndex === mockConfig.numInputPages) {
-            console.log("Wizard finished! Sending data:", formData);
-            // sendToBackend(formData);
+        // If we have already fetched, do nothing
+        if (hasFetchedConfig.current) return;
+        
+        // Mark as fetched
+        hasFetchedConfig.current = true;
+        async function fetchConfig() {
+            try {
+                setIsLoading(true);
+
+                const res = await axios.get(`${baseURL}api/app`);
+                //console.log(res)
+                if (res.status != 200) {
+                    throw new Error("Failed to fetch config");
+                }
+
+                const data =  res.data;
+                console.log(data)
+                setMockConfig(data);
+
+            } catch (err) {
+                console.error(err);
+                //alert("Failed to load app config");
+            } finally {
+                setIsLoading(false);
+            }
         }
-    }, [currentPageIndex, formData]);
+
+        fetchConfig();
+    }, []);
+
+    if(!mockConfig)
+    {
+        return <p>Loading the app</p>
+    }
 
     return (
         <div>
