@@ -3,8 +3,6 @@ import InputPageCard from './components/InputPageCard';
 import OutputPageCard from './components/OutputPageCard';
 import { simulateBackendCalculation } from './mockBackend'; // Import the mock
 
-
-
 const mockConfig = {
   numInputPages: 2,
   pages: [
@@ -127,10 +125,7 @@ function AppRoute() {
                     results={backendResults} 
                 />
             )}
-            
         </div>
-        
-
     )
 }
 
