@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Text, Float
+from sqlalchemy import Column, ForeignKey, Integer, String, Text, Boolean
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -8,12 +8,10 @@ class AppConfig(Base):
     id = Column(Integer, primary_key=True, index=True)
     app_name = Column(String, default="My Solar Calc")
     
-    # Relationship to pages
+    # ONE relationship to rule them all. 
+    # The pages list will contain Page 1, Page 2, and the Final Page.
     pages = relationship("Page", back_populates="config", cascade="all, delete-orphan")
-    # Relationship to calculations (Global now)
-    calculations = relationship("Calculation", back_populates="config", cascade="all, delete-orphan")
 
-###
 
 class Page(Base):
     __tablename__ = "pages"
@@ -21,40 +19,44 @@ class Page(Base):
     id = Column(Integer, primary_key=True, index=True)
     config_id = Column(Integer, ForeignKey("app_configs.id"))
     
-    title = Column(String)
+    title = Column(String, nullable=False)
     description = Column(Text)
-    image = Column(String) # Renamed from image_url
-    order_index = Column(Integer)
-    is_output_page = Column(Boolean, default=False)
+    image_url = Column(String)
+    order_index = Column(Integer, default=0) # Important to keep the order (1, 2, 3...)
+    
+    # Optional: A flag if you really need to know which one is the "Final" one
+    is_final_page = Column(Boolean, default=False)
 
     config = relationship("AppConfig", back_populates="pages")
     
-    # Relationships to contents
+    # NOW A PAGE CAN HAVE BOTH:
     inputs = relationship("InputVariable", back_populates="page", cascade="all, delete-orphan")
-    # Outputs removed from Page, moved to AppConfig as Calculations
+    calculations = relationship("Calculation", back_populates="page", cascade="all, delete-orphan")
 
-###
 
 class InputVariable(Base):
     __tablename__ = "input_variables"
 
     id = Column(Integer, primary_key=True, index=True)
-    page_id = Column(Integer, ForeignKey("pages.id"))
+    page_id = Column(Integer, ForeignKey("pages.id"), nullable=False)
     
-    name = Column(String) # Renamed from variable_name
-    placeholder = Column(String) # Renamed from placeholder_text
-    type = Column(String, default="number") # New field
+    variable_name = Column(String, nullable=False) # e.g. "X"
+    placeholder = Column(String)
+    input_type = Column(String, default="number") # number, slider, etc.
     
     page = relationship("Page", back_populates="inputs")
 
-class Calculation(Base): # Replaces OutputVariable, Global scope
+
+class Calculation(Base):
     __tablename__ = "calculations"
 
     id = Column(Integer, primary_key=True, index=True)
-    config_id = Column(Integer, ForeignKey("app_configs.id"))
     
-    outputName = Column(String) # e.g. "A"
-    formula = Column(String) 
-    unit = Column(String) 
+    # Changed: Now points to 'pages.id', not 'output_pages.id'
+    page_id = Column(Integer, ForeignKey("pages.id"), nullable=False)
     
-    config = relationship("AppConfig", back_populates="calculations")
+    output_name = Column(String, nullable=False) # "Total Cost"
+    formula = Column(String, nullable=False)     # "X + Y"
+    unit = Column(String)                        # "$"
+    
+    page = relationship("Page", back_populates="calculations")

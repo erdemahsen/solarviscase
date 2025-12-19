@@ -21,3 +21,11 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # This is what you were asking about!
 # All your models (User, Page, AppConfig) inherit from this class.
 Base = declarative_base()
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

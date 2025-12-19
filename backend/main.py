@@ -1,7 +1,17 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel 
-from typing import Dict, List, Any 
+from typing import Dict, List, Any
+
+from sqlalchemy.orm import Session
+
+from . import schemas
+from . import database
+from . import crud
+from . import models
+
+
+models.Base.metadata.create_all(bind=database.engine)
 
 app = FastAPI()
 
@@ -21,9 +31,40 @@ app.add_middleware(
 def home():
     return "Home"
 
+@app.get("/api/app/", response_model=List[schemas.AppConfig])
+def get_apps(skip: int = 0, limit: int = 100, db: Session = Depends(database.get_db)):
+    apps = crud.get_apps(db, skip=skip, limit=limit)
+    return apps
+
+@app.post("/api/app/", response_model=schemas.AppConfig)
+def create_app(app_config: schemas.AppConfigCreate, db: Session = Depends(database.get_db)):
+    return crud.create_app(db=db, app=app_config)
+
+@app.get("/api/app/{app_id}/", response_model=schemas.AppConfig)
+def get_app(app_id: int, db: Session = Depends(database.get_db)):
+    return crud.get_app(db=db, app_id=app_id)
+
+@app.delete("/api/app/{app_id}/", response_model=schemas.AppConfig)
+def delete_app(app_id: int, db: Session = Depends(database.get_db)):
+    return crud.delete_app(db=db, app_id=app_id)
 
 
-@app.get("/api/app")
+@app.delete("/apps/{app_id}/pages/{page_id}",response_model=schemas.Page)
+def delete_page(app_id: int,page_id: int,db: Session = Depends(database.get_db)):
+    db_page = crud.delete_page(db=db, page_id=page_id)
+
+    if not db_page:
+        pass
+        #raise HTTPException(status_code=404, detail="Page not found")
+
+    return db_page
+
+
+@app.post("/apps/{app_id}/pages/", response_model=schemas.Page)
+def create_page(app_id: int, page: schemas.PageCreate, db: Session = Depends(database.get_db)):
+    return crud.create_page_for_app(db=db, app_id=app_id, page_data=page)
+
+@app.get("/api/mock")
 def app_config():
     # FastAPI turns dict into JSON automatically :)
     return {

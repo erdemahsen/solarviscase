@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AppRoute from './pages/AppRoute'
+import AppRoute from './pages/AppRoute/AppRoute'
 
 
 function App() {
@@ -14,6 +14,7 @@ function App() {
           
         </Routes>
       </BrowserRouter>
+
     </>
   )
 }

@@ -1,0 +1,121 @@
+@baseUrl = http://localhost:8000
+@appId = 1
+
+### ============================================================================
+### 0. APP CREATION (Run this first!)
+### ============================================================================
+
+### Create the Main App
+# This initializes the app so you have an ID (usually 1) to attach pages to.
+POST {{baseUrl}}/api/app/
+Content-Type: application/json
+
+{
+  "app_name": "My Solar Calc"
+}
+
+### ============================================================================
+### 1. PAGE CONFIGURATION (The "Nested Write" Endpoint)
+### ============================================================================
+
+### Create Page 1 (Energy Basics)
+# This page has 1 Input (X) and NO calculations.
+POST {{baseUrl}}/apps/{{appId}}/pages/
+Content-Type: application/json
+
+{
+  "title": "Energy Basics",
+  "description": "Tell us about your monthly bill.",
+  "image_url": "http://localhost:8000/static/solar-1.jpg",
+  "order_index": 0,
+  "is_final_page": false,
+  "inputs": [
+    {
+      "variable_name": "X",
+      "placeholder": "Monthly Bill ($)",
+      "input_type": "number"
+    }
+  ],
+  "calculations": []
+}
+
+### Create Page 2 (Home Details & Calculations)
+# This page has 2 Inputs (Y, Z) AND defines the Formulas (A, B).
+POST {{baseUrl}}/apps/{{appId}}/pages/
+Content-Type: application/json
+
+{
+  "title": "Home Details",
+  "description": "Enter your roof dimensions.",
+  "image_url": "http://localhost:8000/static/solar-2.jpg",
+  "order_index": 1,
+  "is_final_page": true,
+  "calculations": [
+    {
+      "output_name": "A",
+      "formula": "2 * X",
+      "unit": "kWh"
+    }
+  ]
+}
+
+### ============================================================================
+### 2. RETRIEVAL & DELETION
+### ============================================================================
+
+### Get Full App Configuration
+# This checks if your "GET" is correctly returning the nested tree structure.
+GET {{baseUrl}}/api/app/{{appId}}/
+
+###
+DELETE  {{baseUrl}}/api/app/{{appId}}/
+
+
+### Delete a Page
+# Replace '1' with an actual page ID returned from the creation step
+DELETE {{baseUrl}}/apps/{{appId}}/pages/1
+
+
+
+
+
+
+
+
+
+
+
+
+### ============================================================================
+### 3. EXECUTION (The Business Logic)
+### ============================================================================
+
+### Execute Calculation
+# This sends the user's answers and expects the backend to run the formulas.
+POST {{baseUrl}}/api/app/{{appId}}/calculate
+Content-Type: application/json
+
+{
+  "inputs": {
+    "X": 150,
+    "Y": 50,
+    "Z": 6
+  }
+}
+
+### ============================================================================
+### 4. IMAGE UPLOAD
+### ============================================================================
+
+### Upload an Image
+# You will need to select a file from your computer when prompted
+# or specify the path explicitly if your REST client settings require it.
+POST {{baseUrl}}/upload
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="solar-panel.jpg"
+Content-Type: image/jpeg
+
+< ./solar-panel.jpg
+--boundary--
