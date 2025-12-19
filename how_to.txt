@@ -6,6 +6,7 @@ source myenv/bin/activate
 pip3 install fastapi
 pip3 install uvicorn
 pip3 install sqlalchemy
+pip3 install simpleeval
 # pip install fastapi uvicorn sqlalchemy
 
 cd backend

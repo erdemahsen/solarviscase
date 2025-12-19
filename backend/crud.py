@@ -88,3 +88,12 @@ def delete_page(db: Session, page_id: int):
 # ==========================================
 # 3. USER OPERATIONS (Basic)
 # ==================
+
+def get_page_calculations(db: Session, app_id: int, page_id: int):
+    return (
+        db.query(models.Calculation)
+        .join(models.Page) # Join calculations to their parent page
+        .filter(models.Page.id == page_id)        # Must match the requested page
+        .filter(models.Page.config_id == app_id)  # Must belong to the requested app
+        .all()
+    )

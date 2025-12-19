@@ -121,8 +121,12 @@ def app_config():
         }
     }
 
-@app.post("/api/calculate")
-def calculate_mock(payload: Dict[str, Any]):
+@app.post("/apps/{app_id}/pages/", response_model=schemas.Page)
+def create_page(app_id: int, page: schemas.PageCreate, db: Session = Depends(database.get_db)):
+    return crud.create_page_for_app(db=db, app_id=app_id, page_data=page)
+
+#@app.post("/api/app/{app_id}/pages/{page_id}/calculate")
+def calculate_mock(formData: Dict[str, Any]):
     """
     Receives formData and calculations, returns mock results.
     payload structure expected:
@@ -131,6 +135,7 @@ def calculate_mock(payload: Dict[str, Any]):
         "calculations": [ ... ]
     }
     """
+    print(formData)
     # For a purely mock response, we can just return static numbers
     # matching the expected output format of the frontend.
     return {
@@ -147,3 +152,67 @@ def calculate_mock(payload: Dict[str, Any]):
             }
         ]
     }
+
+
+#@app.get("/apps/{app_id}/pages/{page_id}/calculations", response_model=List[schemas.Calculation])
+#def get_page_calculations(app_id: int, page_id: int, db: Session = Depends(database.get_db)):
+    # Now this returns an empty list [] if the page is not part of the app
+    #return crud.get_page_calculations(db=db, app_id=app_id, page_id=page_id)
+
+from simpleeval import simple_eval  # Recommended for safety, or use eval() with caution
+@app.post("/api/app/{app_id}/pages/{page_id}/calculate")
+def calculate_real(
+    app_id: int, 
+    page_id: int, 
+    payload: Dict[str, Any], 
+    db: Session = Depends(database.get_db)
+):
+    # 1. Extract formData
+    raw_inputs = payload.get("formData", {})
+    
+    # --- FIX START: Convert Strings to Numbers ---
+    user_inputs = {}
+    for key, value in raw_inputs.items():
+        try:
+            # Try to convert to float. 
+            # If inputs are empty strings "", this might fail, so we handle that.
+            if value == "":
+                user_inputs[key] = 0.0
+            else:
+                user_inputs[key] = float(value)
+        except (ValueError, TypeError):
+            # If it's strictly text (like a name), keep it as string
+            user_inputs[key] = value
+    # --- FIX END ---
+
+    print("Sanitized inputs:", user_inputs) 
+
+    # 2. Fetch Formulas
+    db_calculations = crud.get_page_calculations(db=db, app_id=app_id, page_id=page_id)
+    
+    results = []
+    
+    # 3. Calculate
+    for calc in db_calculations:
+        try:
+            # Now "X" is 1.0 (float), so 2 * 1.0 = 2.0
+            calculated_value = eval(calc.formula, {"__builtins__": None}, user_inputs)
+            
+            results.append({
+                "key": calc.output_name,
+                "value": calculated_value,
+                "unit": calc.unit
+            })
+            
+            # Add result to inputs for chaining formulas
+            user_inputs[calc.output_name] = calculated_value
+
+        except Exception as e:
+            print(f"Error calculating {calc.output_name}: {e}")
+            results.append({
+                "key": calc.output_name,
+                "value": "Error", 
+                "unit": "Error"
+            })
+
+    return {"results": results}

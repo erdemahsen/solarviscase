@@ -36,7 +36,13 @@ Content-Type: application/json
       "input_type": "number"
     }
   ],
-  "calculations": []
+  "calculations": [
+    {
+      "output_name": "C",
+      "formula": "X-2",
+      "unit": "X ten iki çıkar"
+    }
+  ]
 }
 
 ### Create Page 2 (Home Details & Calculations)
@@ -55,7 +61,13 @@ Content-Type: application/json
       "output_name": "A",
       "formula": "2 * X",
       "unit": "kWh"
+    },
+    {
+      "output_name": "B",
+      "formula": "6 * X / 3",
+      "unit": "meters"
     }
+
   ]
 }
 

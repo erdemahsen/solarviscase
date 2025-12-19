@@ -1,33 +1,23 @@
 import { useState, useEffect, useRef } from 'react'
 import axios from "axios";
-import InputPageCard from './components/InputPageCard';
-import OutputPageCard from './components/OutputPageCard';
+import PageCard from './components/PageCard';
 
-
-
-
-const baseURL = "http://127.0.0.1:8000/" // last / can be a bad practice, I may remove that
-
+const baseURL = "http://127.0.0.1:8000/" 
 
 function AppRoute() {
     const [currentPageIndex, setCurrentPageIndex] = useState(0)
     const [appConfig, setAppConfig] = useState(null)
-
     const [isLoading, setIsLoading] = useState(false);
-
+    
     // 1. Create a single state object for all inputs
     const [formData, setFormData] = useState({});
-
     const [backendResults, setBackendResults] = useState(null);
-
     const hasFetchedConfig = useRef(false);
 
-    // 2. Create a generic handler that updates the specific key (X, Y, or Z)
     const handleInputChange = (name, value) => {
-        console.log(formData)
         setFormData(prev => ({
             ...prev,
-            [name]: value // Dynamically update the key based on input name
+            [name]: value
         }));
     };
 
@@ -37,39 +27,59 @@ function AppRoute() {
         }
     }
 
+    async function performCalculations() {
+        
+        setIsLoading(true);
+        try {
+            const payload = {
+                formData: formData,
+                //calculations: pageCalculations not gonna be needed
+            };
+
+            console.log(currentPageConfig)
+            const app_id = currentPageConfig.config_id
+            const page_id = currentPageConfig.id
+
+            const response = await axios.post(`${baseURL}api/app/${app_id}/pages/${page_id}/calculate`, payload);
+            console.log("Results received:", response.data);
+            // backend results is a pretty cool dictionary, it only updates the related calculations because thats what we get from the backend
+            setBackendResults(prev => {
+                const current = prev || [];
+                const newResults = response.data.results || [];
+                const mergedMap = new Map(current.map(item => [item.key, item]));
+                newResults.forEach(item => mergedMap.set(item.key, item));
+                return Array.from(mergedMap.values());
+            });
+
+        } catch (error) {
+            console.error("Calculation failed", error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    // UPDATED: Calculation Trigger Logic
+    useEffect(() => {
+        if (!appConfig) return;
+        const currentPageConfig = appConfig.pages[currentPageIndex];
+        const pageCalculations = currentPageConfig?.calculations || [];
+
+        if (pageCalculations.length === 0) return;
+        // UNCOMMENT ABOVE LATER
+
+        // Debounce Logic: Wait 500ms after user stops typing before calling API
+        const delayDebounceFn = setTimeout(() => {
+            performCalculations();
+        }, 500);
+
+        // Cleanup function cancels the timer if formData changes again quickly
+        return () => clearTimeout(delayDebounceFn);
+
+    }, [currentPageIndex, appConfig, formData]); // Triggers on Page Change OR Form Change
+
     async function nextPage() {
         const currentPageConfig = appConfig.pages[currentPageIndex];
-
-        // Check if we are on the final page (according to API)
-        if (currentPageConfig.is_final_page) {
-
-            setIsLoading(true); // Start loading spinner
-
-            try {
-                // Aggregate calculations from all pages
-                const allCalculations = appConfig.pages.flatMap(p => p.calculations || []);
-
-                const payload = {
-                    formData: formData,
-                    calculations: allCalculations
-                }
-
-                const response = await axios.post(`${baseURL}api/calculate`, payload);
-
-                console.log("Results received:", response.data);
-                setBackendResults(response.data.results);
-
-                // Move to "Results" view (index = length of pages)
-                setCurrentPageIndex(prev => prev + 1);
-
-            } catch (error) {
-                console.log(error)
-                alert("Backend failed!");
-            } finally {
-                setIsLoading(false); // Stop loading spinner
-            }
-        } else {
-            // Normal page navigation
+        if (!currentPageConfig.is_final_page) {
             if (currentPageIndex < appConfig.pages.length - 1) {
                 setCurrentPageIndex(prev => prev + 1);
             }
@@ -77,66 +87,47 @@ function AppRoute() {
     }
 
     useEffect(() => {
-        // If we have already fetched, do nothing
         if (hasFetchedConfig.current) return;
-
-        // Mark as fetched
         hasFetchedConfig.current = true;
         async function fetchConfig() {
             try {
-                setIsLoading(true);
-
+                // Don't set global isLoading here, or the page flashes
                 const res = await axios.get(`${baseURL}api/app/1/`);
-                //console.log(res)
-                if (res.status != 200) {
-                    throw new Error("Failed to fetch config");
-                }
-
-                const data = res.data;
-                console.log(data)
-                setAppConfig(data);
-
+                if (res.status != 200) throw new Error("Failed to fetch config");
+                setAppConfig(res.data);
             } catch (err) {
                 console.error(err);
-                //alert("Failed to load app config");
-            } finally {
-                setIsLoading(false);
             }
         }
-
         fetchConfig();
     }, []);
 
     if (!appConfig) {
-        return <p>Loading the app</p>
+        return <p>Loading the app configuration...</p>
     }
 
-    const isResultPage = currentPageIndex === appConfig.pages.length;
+    const currentPageConfig = appConfig.pages[currentPageIndex];
+    const isResultPage = currentPageConfig.is_final_page;
+
+    // REMOVED: if (isLoading) return <p>Calculating...</p>; 
+    // keeping that would destroy the form while typing.
 
     return (
         <div>
-            {/* Show Input Pages if we are NOT on the result page */}
-            {!isResultPage &&
-                <InputPageCard
-                    currentPage={appConfig.pages[currentPageIndex]}
-                    nextPage={nextPage}
-                    prevPage={prevPage}
-                    formData={formData}
-                    handleInputChange={handleInputChange}
-                />
-            }
-            {/* Show Output Page only when we are past the last input page */}
-            {isResultPage && (
-                isLoading ? <p>Calculating...</p> :
-                    <OutputPageCard
-                        // New API doesn't have outputPage object, so we construct a temporary one
-                        outputPage={{ title: "Your Solar Potential", description: "Based on your inputs, here is your estimate." }}
-                        nextPage={nextPage} // Maybe reset or finish?
-                        prevPage={prevPage}
-                        // Pass the BACKEND results, not the form data
-                        results={backendResults}
-                    />
-            )}
+            {/* Optional: Show a subtle loader somewhere, but keep the page rendered */}
+            {isLoading && <div style={{position: 'fixed', top:0, right:0, background:'yellow'}}>Calculating...</div>}
+            
+            <PageCard
+                pageConfig={currentPageConfig}
+                results={backendResults}
+                formData={formData}
+                handleInputChange={handleInputChange}
+                prevPage={prevPage}
+                nextPage={nextPage}
+                isResultPage={isResultPage}
+            />
+
+            <button onClick={() => console.log("backend results are : ",backendResults)}>See backend results array</button>
         </div>
     )
 }
