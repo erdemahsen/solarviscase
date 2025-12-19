@@ -79,10 +79,8 @@ function AppRoute() {
 
     async function nextPage() {
         const currentPageConfig = appConfig.pages[currentPageIndex];
-        if (!currentPageConfig.is_final_page) {
-            if (currentPageIndex < appConfig.pages.length - 1) {
-                setCurrentPageIndex(prev => prev + 1);
-            }
+        if (currentPageIndex < appConfig.pages.length - 1) {
+            setCurrentPageIndex(prev => prev + 1);
         }
     }
 
@@ -107,7 +105,7 @@ function AppRoute() {
     }
 
     const currentPageConfig = appConfig.pages[currentPageIndex];
-    const isResultPage = currentPageConfig.is_final_page;
+    const isResultPage = appConfig.pages.length === currentPageIndex + 1; // maybe I can get rid of this as well idk
 
     // REMOVED: if (isLoading) return <p>Calculating...</p>; 
     // keeping that would destroy the form while typing.

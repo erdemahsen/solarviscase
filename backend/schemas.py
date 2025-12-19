@@ -50,7 +50,6 @@ class PageBase(BaseModel):
     description: Optional[str] = None
     image_url: Optional[str] = None
     order_index: int = 0
-    is_final_page: bool = False
 
 class PageCreate(PageBase):
     # This allows you to create a page AND its contents in one API call

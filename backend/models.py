@@ -24,8 +24,6 @@ class Page(Base):
     image_url = Column(String)
     order_index = Column(Integer, default=0) # Important to keep the order (1, 2, 3...)
     
-    # Optional: A flag if you really need to know which one is the "Final" one
-    is_final_page = Column(Boolean, default=False)
 
     config = relationship("AppConfig", back_populates="pages")
     

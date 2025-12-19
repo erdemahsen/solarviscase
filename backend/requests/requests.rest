@@ -28,7 +28,6 @@ Content-Type: application/json
   "description": "Tell us about your monthly bill.",
   "image_url": "http://localhost:8000/static/solar-1.jpg",
   "order_index": 0,
-  "is_final_page": false,
   "inputs": [
     {
       "variable_name": "X",
@@ -55,7 +54,6 @@ Content-Type: application/json
   "description": "Enter your roof dimensions.",
   "image_url": "http://localhost:8000/static/solar-2.jpg",
   "order_index": 1,
-  "is_final_page": true,
   "calculations": [
     {
       "output_name": "A",
