@@ -77,6 +77,10 @@ Content-Type: application/json
 
 ### Get Full App Configuration
 # This checks if your "GET" is correctly returning the nested tree structure.
+GET {{baseUrl}}/api/app/
+
+### Get Full App Configuration
+# This checks if your "GET" is correctly returning the nested tree structure.
 GET {{baseUrl}}/api/app/{{appId}}/
 
 ###
