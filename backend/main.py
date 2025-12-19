@@ -17,29 +17,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Pydantic stuff is mandatory apparently. However this looks cooked here. We should move it somewhere better
-class CalculateRequest(BaseModel):
-    formData: Dict[str, Any]  # Matches your React "formData" object
-    calculations: List[Any]   # Matches your React "calculations" array
-
 @app.get("/")
 def home():
     return "Home"
 
-@app.post("/api/calculate")
-def app_calculate(payload: CalculateRequest): 
-    # we can get the post payload
-    # print(payload.formData)      
-    # print(payload.calculations)
-
-    # Mock calculation result here 
-    return {
-        "results": [
-            {"key": 'A', "value": 140000, "unit": 'kWh'},
-            {"key": 'B', "value": 700, "unit": 'USD'}
-        ],
-        "calculatedAt": "tempDate"
-    }
 
 
 @app.get("/api/app")

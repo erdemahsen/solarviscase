@@ -5,9 +5,12 @@ source myenv/bin/activate
 
 pip3 install fastapi
 pip3 install uvicorn
+pip3 install sqlalchemy
+# pip install fastapi uvicorn sqlalchemy
 
 cd backend
-uvicorn main:app --reload 
+uvicorn main:app --reload  // not gonna work
+uvicorn backend.main:app --reload
 
 For frontend :
 cd frontend

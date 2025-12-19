@@ -1,0 +1,53 @@
+GET http://localhost:8000/api/app
+
+###
+POST http://localhost:8000/api/pages
+Content-Type: application/json
+
+{
+  "title": "Energy Basics",
+  "description": "Tell us about your energy usage",
+  "image_url": "https://example.com/energy.png",
+  "order_index": 1,
+  "is_output_page": false,
+  "inputs": [
+    {
+      "variable_name": "monthly_consumption",
+      "placeholder_text": "kWh per month"
+    },
+    {
+      "variable_name": "electricity_price",
+      "placeholder_text": "Price per kWh"
+    }
+  ],
+  "outputs": []
+}
+###
+POST http://localhost:8000/api/pages
+Content-Type: application/json
+
+{
+  "title": "Results",
+  "description": "Your calculated solar results",
+  "image_url": "https://example.com/results.png",
+  "order_index": 3,
+  "is_output_page": true,
+  "inputs": [],
+  "outputs": [
+    {
+      "name": "Monthly Savings",
+      "variable_name": "monthly_savings",
+      "unit": "$",
+      "formula": "monthly_consumption * electricity_price * 0.25"
+    },
+    {
+      "name": "Payback Period",
+      "variable_name": "payback_period",
+      "unit": "years",
+      "formula": "system_cost / annual_savings"
+    }
+  ]
+}
+
+###
+GET http://localhost:8000/api/pages
