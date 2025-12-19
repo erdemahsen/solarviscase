@@ -120,3 +120,30 @@ def app_config():
             "image": "https://example.com/result.jpg"
         }
     }
+
+@app.post("/api/calculate")
+def calculate_mock(payload: Dict[str, Any]):
+    """
+    Receives formData and calculations, returns mock results.
+    payload structure expected:
+    {
+        "formData": { "X": 100, ... },
+        "calculations": [ ... ]
+    }
+    """
+    # For a purely mock response, we can just return static numbers
+    # matching the expected output format of the frontend.
+    return {
+        "results": [
+            {
+                "key": "A",
+                "value": 12000,
+                "unit": "kWh"
+            },
+            {
+                "key": "B",
+                "value": 60, 
+                "unit": "USD"
+            }
+        ]
+    }

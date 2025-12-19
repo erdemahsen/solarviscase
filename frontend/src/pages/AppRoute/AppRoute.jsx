@@ -11,7 +11,7 @@ const baseURL = "http://127.0.0.1:8000/" // last / can be a bad practice, I may 
 
 function AppRoute() {
     const [currentPageIndex, setCurrentPageIndex] = useState(0)
-    const [mockConfig, setMockConfig] = useState(null)
+    const [appConfig, setAppConfig] = useState(null)
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -31,41 +31,46 @@ function AppRoute() {
         }));
     };
 
-    function prevPage(){
-        if(currentPageIndex > 0 ){
-            setCurrentPageIndex(currentPageIndex-1)
+    function prevPage() {
+        if (currentPageIndex > 0) {
+            setCurrentPageIndex(currentPageIndex - 1)
         }
     }
 
     async function nextPage() {
-        if (currentPageIndex < mockConfig.numInputPages) {
-            
-            // If we are about to go to the Output Page, call the API (Mock)
-            if (currentPageIndex === mockConfig.numInputPages - 1) {
-                setIsLoading(true); // Start loading spinner
-                // Only move to next page if successful
-                setCurrentPageIndex(prev => prev + 1);
-                
-                try {
+        const currentPageConfig = appConfig.pages[currentPageIndex];
 
-                    const payload = {
-                        formData: formData,
-                        calculations: mockConfig.calculations
-                    }
+        // Check if we are on the final page (according to API)
+        if (currentPageConfig.is_final_page) {
 
-                    const response = await axios.post(`${baseURL}api/calculate`, payload);
-                    
-                    console.log("Results received:", response.data);
-                    setBackendResults(response.data.results);
-                    
-                } catch (error) {
-                    console.log(error)
-                    alert("Backend failed!");
-                } finally {
-                    setIsLoading(false); // Stop loading spinner
+            setIsLoading(true); // Start loading spinner
+
+            try {
+                // Aggregate calculations from all pages
+                const allCalculations = appConfig.pages.flatMap(p => p.calculations || []);
+
+                const payload = {
+                    formData: formData,
+                    calculations: allCalculations
                 }
-            } else {
-                // Normal page navigation
+
+                const response = await axios.post(`${baseURL}api/calculate`, payload);
+
+                console.log("Results received:", response.data);
+                setBackendResults(response.data.results);
+
+                // Move to "Results" view (index = length of pages)
+                setCurrentPageIndex(prev => prev + 1);
+
+            } catch (error) {
+                console.log(error)
+                alert("Backend failed!");
+            } finally {
+                setIsLoading(false); // Stop loading spinner
+            }
+        } else {
+            // Normal page navigation
+            if (currentPageIndex < appConfig.pages.length - 1) {
                 setCurrentPageIndex(prev => prev + 1);
             }
         }
@@ -74,22 +79,22 @@ function AppRoute() {
     useEffect(() => {
         // If we have already fetched, do nothing
         if (hasFetchedConfig.current) return;
-        
+
         // Mark as fetched
         hasFetchedConfig.current = true;
         async function fetchConfig() {
             try {
                 setIsLoading(true);
 
-                const res = await axios.get(`${baseURL}api/app`);
+                const res = await axios.get(`${baseURL}api/app/1/`);
                 //console.log(res)
                 if (res.status != 200) {
                     throw new Error("Failed to fetch config");
                 }
 
-                const data =  res.data;
+                const data = res.data;
                 console.log(data)
-                setMockConfig(data);
+                setAppConfig(data);
 
             } catch (err) {
                 console.error(err);
@@ -102,31 +107,35 @@ function AppRoute() {
         fetchConfig();
     }, []);
 
-    if(!mockConfig)
-    {
+    if (!appConfig) {
         return <p>Loading the app</p>
     }
 
+    const isResultPage = currentPageIndex === appConfig.pages.length;
+
     return (
         <div>
-            {currentPageIndex < mockConfig.numInputPages && 
-                <InputPageCard 
-                    currentPage = {mockConfig.pages[currentPageIndex]} 
-                    nextPage={nextPage} 
-                    prevPage={prevPage} 
-                    formData={formData} 
+            {/* Show Input Pages if we are NOT on the result page */}
+            {!isResultPage &&
+                <InputPageCard
+                    currentPage={appConfig.pages[currentPageIndex]}
+                    nextPage={nextPage}
+                    prevPage={prevPage}
+                    formData={formData}
                     handleInputChange={handleInputChange}
                 />
             }
-            {currentPageIndex === mockConfig.numInputPages && (
-                isLoading ? <p>Calculating...</p> : 
-                <OutputPageCard 
-                    outputPage={mockConfig.outputPage} 
-                    nextPage={nextPage} 
-                    prevPage={prevPage} 
-                    // Pass the BACKEND results, not the form data
-                    results={backendResults} 
-                />
+            {/* Show Output Page only when we are past the last input page */}
+            {isResultPage && (
+                isLoading ? <p>Calculating...</p> :
+                    <OutputPageCard
+                        // New API doesn't have outputPage object, so we construct a temporary one
+                        outputPage={{ title: "Your Solar Potential", description: "Based on your inputs, here is your estimate." }}
+                        nextPage={nextPage} // Maybe reset or finish?
+                        prevPage={prevPage}
+                        // Pass the BACKEND results, not the form data
+                        results={backendResults}
+                    />
             )}
         </div>
     )
