@@ -2,8 +2,8 @@ function PageCard({ pageConfig, results, formData, handleInputChange, prevPage, 
 
     return (
         <div className="card">
-            <h1>{isResultPage ? pageConfig.title : `Input ${pageConfig.id}`}</h1>
-            {!isResultPage && <h2>{pageConfig.title}</h2>}
+            <h1>{isResultPage ? "Output Page" : `Input page ${pageConfig.id}`}</h1>
+            <h2>{pageConfig.title}</h2>
             <h3>{pageConfig.description}</h3>
 
             {pageConfig.image_url &&

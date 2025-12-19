@@ -27,10 +27,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# API Health Check
 @app.get("/")
 def home():
     return "Home"
 
+# /api/app/
 @app.get("/api/app/", response_model=List[schemas.AppConfig])
 def get_apps(skip: int = 0, limit: int = 100, db: Session = Depends(database.get_db)):
     apps = crud.get_apps(db, skip=skip, limit=limit)
@@ -48,6 +50,11 @@ def get_app(app_id: int, db: Session = Depends(database.get_db)):
 def delete_app(app_id: int, db: Session = Depends(database.get_db)):
     return crud.delete_app(db=db, app_id=app_id)
 
+# /apps/{app_id}/pages/
+
+@app.post("/apps/{app_id}/pages/", response_model=schemas.Page)
+def create_page(app_id: int, page: schemas.PageCreate, db: Session = Depends(database.get_db)):
+    return crud.create_page_for_app(db=db, app_id=app_id, page_data=page)
 
 @app.delete("/apps/{app_id}/pages/{page_id}",response_model=schemas.Page)
 def delete_page(app_id: int,page_id: int,db: Session = Depends(database.get_db)):
@@ -59,105 +66,7 @@ def delete_page(app_id: int,page_id: int,db: Session = Depends(database.get_db))
 
     return db_page
 
-
-@app.post("/apps/{app_id}/pages/", response_model=schemas.Page)
-def create_page(app_id: int, page: schemas.PageCreate, db: Session = Depends(database.get_db)):
-    return crud.create_page_for_app(db=db, app_id=app_id, page_data=page)
-
-@app.get("/api/mock")
-def app_config():
-    # FastAPI turns dict into JSON automatically :)
-    return {
-        "numInputPages": 2,
-        "pages": [
-            {
-                "id": 1,
-                "title": "Energy Basics",
-                "description": "Tell us about your current usage.",
-                "image": "https://example.com/solar-1.jpg",
-                "inputs": [
-                    {
-                        "name": "X",
-                        "placeholder": "Monthly Bill ($)",
-                        "type": "number"
-                    }
-                ]
-            },
-            {
-                "id": 2,
-                "title": "Home Details",
-                "description": "Dimensions and location.",
-                "image": "https://example.com/solar-2.jpg",
-                "inputs": [
-                    {
-                        "name": "Y",
-                        "placeholder": "Roof Area (sqm)",
-                        "type": "number"
-                    },
-                    {
-                        "name": "Z",
-                        "placeholder": "Sunlight Hours",
-                        "type": "number"
-                    }
-                ]
-            }
-        ],
-        "calculations": [
-            {
-                "outputName": "A",
-                "formula": "(Y * 100000 + Z * 50000) - (X * 10000)",
-                "unit": "kWh"
-            },
-            {
-                "outputName": "B",
-                "formula": "A / 200",
-                "unit": "USD"
-            }
-        ],
-        "outputPage": {
-            "title": "Your Solar Potential",
-            "description": "Based on your inputs, here is your estimate.",
-            "image": "https://example.com/result.jpg"
-        }
-    }
-
-@app.post("/apps/{app_id}/pages/", response_model=schemas.Page)
-def create_page(app_id: int, page: schemas.PageCreate, db: Session = Depends(database.get_db)):
-    return crud.create_page_for_app(db=db, app_id=app_id, page_data=page)
-
-#@app.post("/api/app/{app_id}/pages/{page_id}/calculate")
-def calculate_mock(formData: Dict[str, Any]):
-    """
-    Receives formData and calculations, returns mock results.
-    payload structure expected:
-    {
-        "formData": { "X": 100, ... },
-        "calculations": [ ... ]
-    }
-    """
-    print(formData)
-    # For a purely mock response, we can just return static numbers
-    # matching the expected output format of the frontend.
-    return {
-        "results": [
-            {
-                "key": "A",
-                "value": 12000,
-                "unit": "kWh"
-            },
-            {
-                "key": "B",
-                "value": 60, 
-                "unit": "USD"
-            }
-        ]
-    }
-
-
-#@app.get("/apps/{app_id}/pages/{page_id}/calculations", response_model=List[schemas.Calculation])
-#def get_page_calculations(app_id: int, page_id: int, db: Session = Depends(database.get_db)):
-    # Now this returns an empty list [] if the page is not part of the app
-    #return crud.get_page_calculations(db=db, app_id=app_id, page_id=page_id)
+# /api/app/{app_id}/pages/{page_id}/calculate
 
 from simpleeval import simple_eval  # Recommended for safety, or use eval() with caution
 @app.post("/api/app/{app_id}/pages/{page_id}/calculate")

@@ -92,7 +92,7 @@ function AppRoute() {
         async function fetchConfig() {
             try {
                 // Don't set global isLoading here, or the page flashes
-                const res = await axios.get(`${baseURL}api/app/1/`);
+                const res = await axios.get(`${baseURL}api/app/1/`); // we are only fetching app 1 -> if I want I can with ease add other apps with small changes to the code
                 if (res.status != 200) throw new Error("Failed to fetch config");
                 setAppConfig(res.data);
             } catch (err) {
