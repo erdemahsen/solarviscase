@@ -80,6 +80,8 @@ def get_page_calculations(db: Session, app_id: int, page_id: int):
 # 4. BULK UPDATE / RECONCILIATION LOGIC (NEW)
 # ==========================================
 
+
+# going nuclear is dumb, for current implementation it would cause no issue, but in the future if someone uses some input's foreign key for example, that would cause problems
 def update_app_structure(db: Session, app_id: int, app_data: schemas.AppConfigUpdate):
     """
     Synchronizes the full app structure.
