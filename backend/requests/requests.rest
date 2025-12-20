@@ -89,33 +89,56 @@ DELETE  {{baseUrl}}/api/app/{{appId}}/
 # Replace '1' with an actual page ID returned from the creation step
 DELETE {{baseUrl}}/apps/{{appId}}/pages/1
 
-
-
-
-
-
-
-
-
-
-
-
 ### ============================================================================
-### 3. EXECUTION (The Business Logic)
+### 5. BULK UPDATE (The Structure Endpoint)
 ### ============================================================================
 
-### Execute Calculation
-# This sends the user's answers and expects the backend to run the formulas.
-POST {{baseUrl}}/api/app/{{appId}}/calculate
+### Update App Structure (Update, Create, and Delete in one go)
+PUT {{baseUrl}}/api/app/{{appId}}/structure
 Content-Type: application/json
 
 {
-  "inputs": {
-    "X": 150,
-    "Y": 50,
-    "Z": 6
-  }
+  "app_name": "My Solar Calc (v2)",
+  "pages": [
+    {
+      "id": 1,
+      "title": "Monthly Usage (Updated)",
+      "description": "We updated this page title!",
+      "image_url": "http://localhost:8000/static/solar-1.jpg",
+      "order_index": 0,
+      "inputs": [
+        {
+          "id": 1, 
+          "variable_name": "Bill", 
+          "placeholder": "Monthly Bill ($)",
+          "input_type": "number"
+        },
+        {
+          "variable_name": "Roof_Area", 
+          "placeholder": "Roof Size (m2)", 
+          "input_type": "number"
+        }
+      ],
+      "calculations": [] 
+    },
+    {
+      "title": "Results Page (New)",
+      "description": "This page was just created.",
+      "image_url": "",
+      "order_index": 1,
+      "inputs": [],
+      "calculations": [
+        {
+          "output_name": "Total_Savings",
+          "formula": "Bill * 12",
+          "unit": "$"
+        }
+      ]
+    }
+  ]
 }
+
+
 
 ### ============================================================================
 ### 4. IMAGE UPLOAD

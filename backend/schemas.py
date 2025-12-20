@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 
 # ==========================================
-# 1. INPUT VARIABLES (The Bottom Layer)
+# 1. INPUT VARIABLES
 # ==========================================
 
 class InputVariableBase(BaseModel):
@@ -13,6 +13,10 @@ class InputVariableBase(BaseModel):
 class InputVariableCreate(InputVariableBase):
     pass
 
+# NEW: Used for the Bulk Update
+class InputVariableUpdate(InputVariableBase):
+    id: Optional[int] = None
+
 class InputVariable(InputVariableBase):
     id: int
     page_id: int
@@ -22,7 +26,7 @@ class InputVariable(InputVariableBase):
 
 
 # ==========================================
-# 2. CALCULATIONS (The Bottom Layer)
+# 2. CALCULATIONS 
 # ==========================================
 
 class CalculationBase(BaseModel):
@@ -33,6 +37,10 @@ class CalculationBase(BaseModel):
 class CalculationCreate(CalculationBase):
     pass
 
+# NEW: Used for the Bulk Update
+class CalculationUpdate(CalculationBase):
+    id: Optional[int] = None
+
 class Calculation(CalculationBase):
     id: int
     page_id: int
@@ -42,7 +50,7 @@ class Calculation(CalculationBase):
 
 
 # ==========================================
-# 3. PAGES (The Middle Layer - UNIFIED)
+# 3. PAGES 
 # ==========================================
 
 class PageBase(BaseModel):
@@ -52,15 +60,19 @@ class PageBase(BaseModel):
     order_index: int = 0
 
 class PageCreate(PageBase):
-    # This allows you to create a page AND its contents in one API call
     inputs: List[InputVariableCreate] = []
     calculations: List[CalculationCreate] = []
+
+# NEW: The "Heavy" Update Schema
+class PageFullUpdate(PageBase):
+    id: Optional[int] = None
+    # Notice we use the Update versions here, not Create
+    inputs: List[InputVariableUpdate] = []
+    calculations: List[CalculationUpdate] = []
 
 class Page(PageBase):
     id: int
     config_id: int
-    
-    # The Magic: A page can have both!
     inputs: List[InputVariable] = []
     calculations: List[Calculation] = []
 
@@ -69,7 +81,7 @@ class Page(PageBase):
 
 
 # ==========================================
-# 4. APP CONFIG (The Top Layer)
+# 4. APP CONFIG 
 # ==========================================
 
 class AppConfigBase(BaseModel):
@@ -78,10 +90,12 @@ class AppConfigBase(BaseModel):
 class AppConfigCreate(AppConfigBase):
     pass
 
+# NEW: The payload you send when clicking "Save"
+class AppConfigUpdate(AppConfigBase):
+    pages: List[PageFullUpdate] = []
+
 class AppConfig(AppConfigBase):
     id: int
-    
-    # Returns all pages, sorted by order_index automatically if you handle it in CRUD
     pages: List[Page] = []
 
     class Config:
