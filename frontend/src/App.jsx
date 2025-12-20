@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppRoute from './pages/AppRoute/AppRoute'
-import AdminRoute from './pages/AdminRoute/AdminRoute';
-import AdminApp from './pages/AdminRoute/AdminApp';
+import AdminRoute from './pages/AdminRoute/AdminRoute/AdminRoute';
+import AdminApp from './pages/AdminRoute/AdminApp/AdminApp';
+
 
 
 function App() {

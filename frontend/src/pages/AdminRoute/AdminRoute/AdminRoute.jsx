@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import CreateAppButton from "./components/CreateAppButton";
+import AdminAppList from "./components/AdminAppList";
 
 const baseURL = "http://127.0.0.1:8000";
 
@@ -87,61 +89,23 @@ function AdminRoute() {
     }
   };
 
+  const handleAppClick = (appId) => {
+    navigate(`/admin/${appId}`);
+  };
+
   if (loading) return <p>Loading apps...</p>;
 
   return (
     <div>
       <h1>Admin – Applications</h1>
 
-      {/* ➕ Create App */}
-      <button
-        onClick={handleCreateApp}
-        style={{
-          marginBottom: "16px",
-          padding: "8px 12px",
-          cursor: "pointer"
-        }}
-      >
-        ➕ Create New App
-      </button>
+      <CreateAppButton onCreate={handleCreateApp} />
 
-      {apps.length === 0 && <p>No apps found</p>}
-
-      {apps.map(app => (
-        <div
-          key={app.id}
-          style={{
-            border: "1px solid #ccc",
-            padding: "12px",
-            marginBottom: "8px",
-            cursor: "pointer",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center"
-          }}
-          onClick={() => navigate(`/admin/${app.id}`)}
-        >
-          <div>
-            <h3>{app.app_name}</h3>
-            <p>id: {app.id}</p>
-            <p>num of pages: {app.pages.length}</p>
-          </div>
-
-          {/* 🗑️ Delete */}
-          <button
-            onClick={(e) => handleDelete(e, app.id)}
-            style={{
-              background: "transparent",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "18px"
-            }}
-            title="Delete app"
-          >
-            🗑️
-          </button>
-        </div>
-      ))}
+      <AdminAppList
+        apps={apps}
+        onDelete={handleDelete}
+        onAppClick={handleAppClick}
+      />
     </div>
   );
 }
