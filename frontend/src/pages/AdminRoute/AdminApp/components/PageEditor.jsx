@@ -2,6 +2,13 @@ import { v4 as uuidv4 } from 'uuid';
 import styles from "../AdminApp.module.css";
 
 function PageEditor({ page, onUpdatePage, onDeletePage }) {
+  if (!page) {
+    return (
+      <div className={styles.pageEditor} style={{ display: 'flex', alignItems: 'center', justifyItems: 'center', justifyContent: 'center' }}>
+        <p>There are no pages. Add a page.</p>
+      </div>
+    );
+  }
 
   // --- HANDLERS FOR PAGE FIELDS ---
   const handleMainFieldChange = (e) => {
