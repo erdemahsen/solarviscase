@@ -1,10 +1,12 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import PageCard from './components/PageCard';
+import AppHeader from './components/AppHeader';
 import { useAppOverview } from './hooks/useAppOverview';
 import styles from './AppOverview.module.css';
 
 function AppOverview() {
     const { appId } = useParams();
+    const navigate = useNavigate();
     const {
         appConfig,
         loading,
@@ -27,6 +29,13 @@ function AppOverview() {
         <div className={styles.appOverviewContainer}>
             {loading && <div className={styles.loadingOverlay}>Calculating...</div>}
 
+            <AppHeader
+                title={appConfig.app_name}
+                currentPage={currentPageIndex + 1}
+                totalPages={appConfig.pages.length}
+                onBack={() => navigate('/app/')}
+            />
+
             <PageCard
                 pageConfig={currentPageConfig}
                 results={backendResults}
@@ -36,14 +45,6 @@ function AppOverview() {
                 nextPage={nextPage}
                 isResultPage={isResultPage}
             />
-
-            {/* Debug/Overview Button */}
-            <button
-                className="button actionButton"
-                onClick={() => console.log("backend results are : ", backendResults)}
-            >
-                See backend results array
-            </button>
         </div>
     )
 }

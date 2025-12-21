@@ -132,3 +132,32 @@
     padding-top: 20px;
     border-top: 1px solid var(--border-color);
 }
+
+/* App Header Specifics */
+.headerContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+}
+
+.headerContainerUpper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.progressContainer {
+    width: 100%;
+    height: 6px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.progressBar {
+    height: 100%;
+    background-color: var(--color-secondary);
+    transition: width 0.3s ease;
+}
