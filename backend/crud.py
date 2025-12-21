@@ -156,7 +156,6 @@ def reconcile_inputs(db: Session, db_page: models.Page, inputs_data: List[schema
             db_inp = existing_inputs[inp_data.id]
             db_inp.variable_name = inp_data.variable_name
             db_inp.placeholder = inp_data.placeholder
-            db_inp.input_type = inp_data.input_type
             incoming_ids.add(inp_data.id)
         else:
             # Create

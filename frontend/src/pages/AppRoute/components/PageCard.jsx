@@ -17,9 +17,8 @@ function PageCard({ pageConfig, results, formData, handleInputChange, prevPage, 
             {/* --- INPUTS SECTION --- */}
             {pageConfig.inputs && pageConfig.inputs.map((input) => (
                 <div key={input.variable_name} style={{ marginBottom: '10px' }}>
-                    <label style={{display: 'block'}}>{input.placeholder}</label>
+                    <label style={{ display: 'block' }}>{input.placeholder}</label>
                     <input
-                        type={input.input_type}
                         value={formData[input.variable_name] || ''}
                         onChange={(e) => handleInputChange(input.variable_name, e.target.value)}
                     />
@@ -35,13 +34,13 @@ function PageCard({ pageConfig, results, formData, handleInputChange, prevPage, 
                     <h4>Calculations:</h4>
                     {/* 2. Loop through the CONFIG, not the results */}
                     {pageConfig.calculations.map((calcDef) => {
-                        
+
                         // 3. Find the matching result in the global results array
                         // We match `output_name` from config to `key` from backend
                         const match = results?.find(r => r.key === calcDef.output_name);
 
                         // 4. If result doesn't exist yet (calculating...), show placeholder or nothing
-                        if (!match) return null; 
+                        if (!match) return null;
 
                         return (
                             <div key={calcDef.output_name} style={{ color: 'blue', fontWeight: 'bold' }}>

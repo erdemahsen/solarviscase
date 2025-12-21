@@ -31,8 +31,7 @@ Content-Type: application/json
   "inputs": [
     {
       "variable_name": "X",
-      "placeholder": "Monthly Bill ($)",
-      "input_type": "number"
+      "placeholder": "Monthly Bill ($)"
     }
   ],
   "calculations": [
@@ -111,12 +110,10 @@ Content-Type: application/json
           "id": 1, 
           "variable_name": "Bill", 
           "placeholder": "Monthly Bill ($)",
-          "input_type": "number"
         },
         {
           "variable_name": "Roof_Area", 
           "placeholder": "Roof Size (m2)", 
-          "input_type": "number"
         }
       ],
       "calculations": [] 

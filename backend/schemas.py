@@ -8,7 +8,6 @@ from typing import List, Optional
 class InputVariableBase(BaseModel):
     variable_name: str
     placeholder: Optional[str] = None
-    input_type: str = "number"
 
 class InputVariableCreate(InputVariableBase):
     pass

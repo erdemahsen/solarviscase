@@ -50,7 +50,6 @@ export const useAdminApp = (appId) => {
                 id: i.id,
                 variable_name: i.variable_name,
                 placeholder: i.placeholder,
-                input_type: i.input_type,
             })),
 
             calculations: p.calculations.map((c) => ({

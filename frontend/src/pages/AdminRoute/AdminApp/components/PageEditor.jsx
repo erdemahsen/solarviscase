@@ -22,7 +22,6 @@ function PageEditor({ page, onUpdatePage, onDeletePage }) {
       // No database ID yet
       variable_name: "New_Var",
       placeholder: "Enter value...",
-      input_type: "number"
     };
     onUpdatePage({ ...page, inputs: [...page.inputs, newInput] });
   };
@@ -98,13 +97,6 @@ function PageEditor({ page, onUpdatePage, onDeletePage }) {
             onChange={(e) => handleInputChange(input._uuid, 'placeholder', e.target.value)}
             placeholder="Placeholder"
           />
-          <select
-            value={input.input_type}
-            onChange={(e) => handleInputChange(input._uuid, 'input_type', e.target.value)}
-          >
-            <option value="number">Number</option>
-            <option value="slider">Slider</option>
-          </select>
           <button onClick={() => removeInput(input._uuid)} style={{ color: 'red' }}>×</button>
         </div>
       ))}

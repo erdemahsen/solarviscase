@@ -40,7 +40,6 @@ class InputVariable(Base):
     
     variable_name = Column(String, nullable=False) # e.g. "X"
     placeholder = Column(String)
-    input_type = Column(String, default="number") # number, slider, etc.
     
     page = relationship("Page", back_populates="inputs")
 
