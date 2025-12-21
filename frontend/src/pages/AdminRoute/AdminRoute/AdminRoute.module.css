@@ -5,12 +5,29 @@
     border-radius: 10px;
     gap: 10px;
     background-color: var(--color-primary-dark);
-    width: 50vw;
-    height: 90vh;
+    width: 35vw;
+    height: 70vh;
 }
 
 .adminHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.appListItem {
+    border: 1px solid #ccc;
+    padding: 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-page);
+    border-radius: 8px;
+    transition: filter 0.2s;
+}
+
+.appListItem:hover {
+    filter: brightness(0.95);
 }

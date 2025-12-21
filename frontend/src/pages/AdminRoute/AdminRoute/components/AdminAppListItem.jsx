@@ -1,37 +1,24 @@
 import React from "react";
+import styles from "../AdminRoute.module.css";
 
-function AdminAppListItem({ app, onDelete, onClick }) {
+function AdminAppListItem({ app, onDelete, onClick, onNavigationClick }) {
     return (
         <div
-            style={{
-                border: "1px solid #ccc",
-                padding: "12px",
-                marginBottom: "8px",
-                cursor: "pointer",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-            }}
+            className={styles.appListItem}
             onClick={() => onClick(app.id)}
         >
             <div>
                 <h3>{app.app_name}</h3>
-                <p>id: {app.id}</p>
+                <p onClick={(e) => { e.stopPropagation(); onNavigationClick(app.id); }} style={{ cursor: "pointer", textDecoration: "underline" }}>Page preview: /app/{app.id}</p>
                 <p>num of pages: {app.pages.length}</p>
             </div>
 
-            {/* 🗑️ Delete */}
             <button
                 onClick={(e) => onDelete(e, app.id)}
-                style={{
-                    background: "transparent",
-                    border: "none",
-                    cursor: "pointer",
-                    fontSize: "18px",
-                }}
+                className="button actionButton"
                 title="Delete app"
             >
-                🗑️
+                X
             </button>
         </div>
     );

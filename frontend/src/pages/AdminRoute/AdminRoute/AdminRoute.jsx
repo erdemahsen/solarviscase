@@ -39,13 +39,17 @@ function AdminRoute() {
     navigate(`/admin/${appId}`);
   };
 
+  const handleNavigationClick = (appId) => {
+    navigate(`/app/${appId}`);
+  };
+
   if (loading) return <p>Loading apps...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className={styles.adminRouteContainer}>
       <div className={styles.adminHeader}>
-        <h1>Admin – Applications</h1>
+        <h1>Admin - Apps</h1>
         <button onClick={() => alert("not implemented yet")} className="button actionButton">
           Log out
         </button>
@@ -58,6 +62,7 @@ function AdminRoute() {
         apps={apps}
         onDelete={handleDelete}
         onAppClick={handleAppClick}
+        onNavigationClick={handleNavigationClick}
       />
     </div>
   );
