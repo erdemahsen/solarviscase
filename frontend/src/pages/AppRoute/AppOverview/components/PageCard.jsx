@@ -1,60 +1,72 @@
+import styles from '../AppOverview.module.css';
+
 function PageCard({ pageConfig, results, formData, handleInputChange, prevPage, nextPage, isResultPage }) {
 
     return (
-        <div className="card">
-            <h1>{isResultPage ? "Output Page" : `Input page ${pageConfig.id}`}</h1>
-            <h2>{pageConfig.title}</h2>
-            <h3>{pageConfig.description}</h3>
+        <div className={styles.cardContainer}>
+            <div className={styles.header}>
+                <h2 className={styles.title}>{pageConfig.title}</h2>
+                <p className={styles.description}>{pageConfig.description}</p>
+            </div>
 
             {pageConfig.image_url &&
-                <img
-                    src={pageConfig.image_url}
-                    alt={pageConfig.title}
-                    style={{ maxWidth: '100%' }}
-                />
+                <div className={styles.imageContainer}>
+                    <img
+                        src={pageConfig.image_url}
+                        alt={pageConfig.title}
+                        className={styles.image}
+                    />
+                </div>
             }
 
             {/* --- INPUTS SECTION --- */}
-            {pageConfig.inputs && pageConfig.inputs.map((input) => (
-                <div key={input.variable_name} style={{ marginBottom: '10px' }}>
-                    <label style={{ display: 'block' }}>{input.placeholder}</label>
-                    <input
-                        value={formData[input.variable_name] || ''}
-                        onChange={(e) => handleInputChange(input.variable_name, e.target.value)}
-                    />
-                </div>
-            ))}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                {pageConfig.inputs && pageConfig.inputs.map((input) => (
+                    <div key={input.variable_name} className={styles.inputGroup}>
+                        <label className={styles.label}>{input.placeholder}</label>
+                        <input
+                            className={styles.input}
+                            value={formData[input.variable_name] || ''}
+                            onChange={(e) => handleInputChange(input.variable_name, e.target.value)}
+                            placeholder={`Enter ${input.variable_name}...`}
+                        />
+                    </div>
+                ))}
+            </div>
 
-            <hr />
-
-            {/* --- RESULTS SECTION (UPDATED) --- */}
-            {/* 1. We check if this page actually has calculation definitions */}
+            {/* --- RESULTS SECTION --- */}
             {pageConfig.calculations && pageConfig.calculations.length > 0 && (
-                <div className="results-area">
-                    <h4>Calculations:</h4>
-                    {/* 2. Loop through the CONFIG, not the results */}
+                <div className={styles.resultsArea}>
+                    <h4 style={{ marginTop: 0, marginBottom: '10px' }}>Calculations</h4>
                     {pageConfig.calculations.map((calcDef) => {
-
-                        // 3. Find the matching result in the global results array
-                        // We match `output_name` from config to `key` from backend
                         const match = results?.find(r => r.key === calcDef.output_name);
-
-                        // 4. If result doesn't exist yet (calculating...), show placeholder or nothing
                         if (!match) return null;
 
                         return (
-                            <div key={calcDef.output_name} style={{ color: 'blue', fontWeight: 'bold' }}>
-                                {/* Use the label from config, and value from result */}
-                                {calcDef.output_name}: {match.value} {calcDef.unit}
+                            <div key={calcDef.output_name} className={styles.resultItem}>
+                                <span>{calcDef.output_name}:</span>
+                                <span style={{ fontWeight: 'bold', color: 'var(--color-secondary)' }}>
+                                    {match.value} {calcDef.unit}
+                                </span>
                             </div>
                         );
                     })}
                 </div>
             )}
 
-            <div className="actions" style={{ marginTop: '20px' }}>
-                <button onClick={prevPage} disabled={!prevPage}>Back</button>
-                <button onClick={nextPage}>
+            <div className={styles.actions}>
+                <button
+                    className="button actionButton"
+                    onClick={prevPage}
+                    disabled={!prevPage}
+                    style={{ visibility: prevPage ? 'visible' : 'hidden' }} // Hide if no prev action
+                >
+                    Back
+                </button>
+                <button
+                    className="button"
+                    onClick={nextPage}
+                >
                     {isResultPage ? "Finish" : "Next"}
                 </button>
             </div>

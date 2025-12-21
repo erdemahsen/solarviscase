@@ -16,6 +16,9 @@ const appService = {
     updateAppStructure: (appId, payload) => {
         return api.put(`/api/app/${appId}/structure`, payload);
     },
+    calculatePage: (appId, pageId, payload) => {
+        return api.post(`/api/app/${appId}/pages/${pageId}/calculate`, payload);
+    },
 };
 
 export default appService;

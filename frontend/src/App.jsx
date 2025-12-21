@@ -15,7 +15,7 @@ function App() {
         <Routes>
           <Route path="/" element = {<h1>This is the home path</h1>}/>
           <Route path="/app" element = {<AppHome/>}></Route>
-          <Route path="/app/1" element = {<AppOverview/>}/>
+          <Route path="/app/:appId" element = {<AppOverview/>}/>
           <Route path="/admin" element = {<AdminHome/>}/>
           <Route path="/admin/:appId" element={<AdminApp />} />
           
