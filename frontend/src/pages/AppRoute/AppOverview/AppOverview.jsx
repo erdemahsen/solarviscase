@@ -4,7 +4,7 @@ import PageCard from './components/PageCard';
 
 const baseURL = "http://127.0.0.1:8000/" 
 
-function AppRoute() {
+function AppOverview() {
     const [currentPageIndex, setCurrentPageIndex] = useState(0)
     const [appConfig, setAppConfig] = useState(null)
     const [isLoading, setIsLoading] = useState(false);
@@ -130,4 +130,4 @@ function AppRoute() {
     )
 }
 
-export default AppRoute
+export default AppOverview
