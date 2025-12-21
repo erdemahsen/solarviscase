@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import CreateAppButton from "./components/CreateAppButton";
 import AdminAppList from "./components/AdminAppList";
 import { useApps } from "./hooks/useApps";
+
+import styles from "./AdminRoute.module.css";
+
 
 function AdminRoute() {
   const { apps, loading, error, addApp, removeApp } = useApps();
@@ -41,10 +43,16 @@ function AdminRoute() {
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
-    <div>
-      <h1>Admin – Applications</h1>
-
-      <CreateAppButton onCreate={handleCreateApp} />
+    <div className={styles.adminRouteContainer}>
+      <div className={styles.adminHeader}>
+        <h1>Admin – Applications</h1>
+        <button onClick={() => alert("not implemented yet")} className="button actionButton">
+          Log out
+        </button>
+      </div>
+      <button onClick={handleCreateApp} className="button">
+        + Create New App
+      </button>
 
       <AdminAppList
         apps={apps}
