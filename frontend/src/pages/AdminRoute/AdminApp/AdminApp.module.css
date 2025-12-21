@@ -91,3 +91,10 @@
     overflow-y: auto;
     min-height: 0;
 }
+
+.ioRow {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}

@@ -7,7 +7,7 @@ function CalculationsSection({ calculations, onCalcChange, onAddCalc, onRemoveCa
             <h3>Calculations</h3>
 
             {calculations.map((calc) => (
-                <div key={calc._uuid} style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
+                <div className={styles.ioRow} key={calc._uuid}>
                     <input
                         value={calc.output_name}
                         onChange={(e) => onCalcChange(calc._uuid, 'output_name', e.target.value)}

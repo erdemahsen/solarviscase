@@ -11,6 +11,7 @@ function PageSettings({ page, onChange }) {
                     value={page.title}
                     onChange={onChange}
                     style={{ width: '100%', padding: '5px' }}
+                    placeholder="e.g. When was your house built?"
                 />
             </div>
             <div style={{ marginBottom: 15 }}>
@@ -20,6 +21,7 @@ function PageSettings({ page, onChange }) {
                     value={page.description || ""}
                     onChange={onChange}
                     style={{ width: '100%', padding: '5px' }}
+                    placeholder="e.g. Enter when your house was built"
                 />
             </div>
         </>

@@ -19,8 +19,8 @@ export const usePageEditor = (page, onUpdatePage) => {
         const newInput = {
             _uuid: uuidv4(), // Generate Frontend ID
             // No database ID yet
-            variable_name: "New_Var",
-            placeholder: "Enter value...",
+            variable_name: "",
+            placeholder: "",
         };
         onUpdatePage({ ...page, inputs: [...page.inputs, newInput] });
     };
@@ -41,9 +41,9 @@ export const usePageEditor = (page, onUpdatePage) => {
     const addCalc = () => {
         const newCalc = {
             _uuid: uuidv4(),
-            output_name: "Result_A",
-            formula: "X * 2",
-            unit: "$"
+            output_name: "",
+            formula: "",
+            unit: ""
         };
         onUpdatePage({ ...page, calculations: [...page.calculations, newCalc] });
     };

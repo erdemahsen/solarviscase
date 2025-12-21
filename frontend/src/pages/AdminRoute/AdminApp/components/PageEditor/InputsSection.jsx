@@ -8,7 +8,7 @@ function InputsSection({ inputs, onInputChange, onAddInput, onRemoveInput }) {
             {inputs.length === 0 && <p>No inputs in this page.</p>}
 
             {inputs.map((input) => (
-                <div key={input._uuid} style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
+                <div className={styles.ioRow} key={input._uuid}>
                     <input
                         value={input.variable_name}
                         onChange={(e) => onInputChange(input._uuid, 'variable_name', e.target.value)}

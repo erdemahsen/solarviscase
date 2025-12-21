@@ -85,7 +85,7 @@ export const useAdminApp = (appId) => {
         const newPage = {
             _uuid: newPageUuid,
             title: "New Page",
-            description: "Enter a description...",
+            description: "",
             image_url: "",
             order_index: appConfig.pages.length,
             inputs: [],
