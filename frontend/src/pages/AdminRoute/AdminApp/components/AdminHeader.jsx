@@ -1,16 +1,18 @@
 import React from "react";
+import styles from "../AdminApp.module.css";
 
 function AdminHeader({ appName, onSave, isDirty, onBack }) {
     return (
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <button onClick={onBack}>← Back</button>
+        <div className={styles.adminHeader}>
+            <button className={styles.button} onClick={onBack}>← Back</button>
             <h2>Editing: {appName}</h2>
             <button
+                className={`${styles.button} ${styles.actionButton}`}
                 onClick={onSave}
                 disabled={!isDirty}
-                style={{ backgroundColor: isDirty ? 'blue' : 'grey', color: 'white', padding: '10px 20px', border: 'none', borderRadius: '4px', cursor: isDirty ? 'pointer' : 'default' }}
+                style={{ opacity: isDirty ? 1 : 0.5 }}
             >
-                Save Changes
+                Save
             </button>
         </div>
     );

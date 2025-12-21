@@ -4,6 +4,8 @@ import { useAdminApp } from "./hooks/useAdminApp";
 import AdminHeader from "./components/AdminHeader";
 import PageList from "./components/PageList";
 
+import styles from "./AdminApp.module.css";
+
 function AdminApp() {
   const navigate = useNavigate();
   const { appId } = useParams();
@@ -33,18 +35,13 @@ function AdminApp() {
   if (!appConfig) return <p>App not found</p>;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', }}>
-      {/* HEADER */}
-
-
+    <div className={styles.adminAppContainer}>
       <AdminHeader
         appName={appConfig.app_name}
         onSave={onSaveClick}
         isDirty={isDirty}
         onBack={() => navigate("/admin")}
       />
-
-      {/* TOP: HORIZONTAL PAGE LIST */}
       <PageList
         pages={appConfig.pages}
         activePageUuid={activePageUuid}
@@ -52,8 +49,6 @@ function AdminApp() {
         onAddPage={handleAddPage}
         onDeletePage={handleDeletePage}
       />
-
-      {/* BOTTOM: MAIN EDITOR AREA */}
       <PageEditor
         page={appConfig.pages.find(p => p._uuid === activePageUuid)}
         onUpdatePage={handleUpdatePage}

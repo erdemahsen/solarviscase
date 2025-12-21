@@ -1,0 +1,16 @@
+/* src/variables.css */
+:root {
+  /* --- BRAND COLORS --- */
+  --color-primary: #007bff;
+
+  --color-primary-dark:#24334B;;
+
+  --color-secondary: #ff8800;
+
+  --bg: #111111;
+
+  --bg-page: #383C43;
+
+  --border-color: white;
+
+}

@@ -1,0 +1,81 @@
+.adminAppContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 10px;
+    gap: 10px;
+    background-color: var(--color-primary-dark);
+    width: 50vw;
+    height: 90vh;
+}
+
+.button {
+    padding: 0 16px;
+    height: 36px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: filter 0.2s;
+    background-color: var(--color-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button:hover {
+    filter: brightness(0.85);
+}
+
+.actionButton {
+    background-color: var(--color-secondary);
+}
+
+.adminHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pageList {
+    display: flex;
+    gap: 10px;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.pageCard {
+    position: relative;
+    padding: 8px;
+    background-color: transparent;
+    cursor: pointer;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    font-size: 12px;
+    background-color: var(--color-primary);
+    filter: brightness(0.65)
+}
+
+.pageCardActive {
+    filter: brightness(1);
+    background-color: var(--color-primary);
+}
+
+.pageEditor {
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--bg-page);
+}

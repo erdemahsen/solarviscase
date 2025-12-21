@@ -1,9 +1,10 @@
 import React from "react";
 import PageCard from "./PageCard";
+import styles from "../AdminApp.module.css";
 
 function PageList({ pages, activePageUuid, onSelectPage, onAddPage, onDeletePage }) {
     return (
-        <div style={{ display: 'flex', gap: '10px', padding: '10px', alignItems: 'center', backgroundColor: 'blue', justifyContent: 'center' }}>
+        <div className={styles.pageList}>
             {pages.map((page) => (
                 <PageCard
                     key={page._uuid}

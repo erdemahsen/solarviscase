@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import styles from "../AdminApp.module.css";
 
 function PageEditor({ page, onUpdatePage, onDeletePage }) {
 
@@ -56,7 +57,7 @@ function PageEditor({ page, onUpdatePage, onDeletePage }) {
 
   // --- RENDER ---
   return (
-    <div style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
+    <div className={styles.pageEditor}>
 
       {/* 1. Page Details */}
       <h3>Page Settings</h3>
@@ -107,7 +108,7 @@ function PageEditor({ page, onUpdatePage, onDeletePage }) {
           <button onClick={() => removeInput(input._uuid)} style={{ color: 'red' }}>×</button>
         </div>
       ))}
-      <button onClick={addInput} style={{ marginTop: 5 }}>+ Add Input</button>
+      <button onClick={addInput} className={styles.button}>+ Add Input</button>
 
       <hr />
 
@@ -142,12 +143,12 @@ function PageEditor({ page, onUpdatePage, onDeletePage }) {
       ))}
       <div style={{ marginTop: '20px', borderTop: '1px solid #ddd', paddingTop: '10px' }}>
         <button
+          className={`${styles.button} ${styles.actionButton}`}
           onClick={() => {
             if (window.confirm("Are you sure you want to delete this page?")) {
               onDeletePage(page._uuid);
             }
           }}
-          style={{ backgroundColor: 'red', color: 'white', border: 'none', padding: '10px', borderRadius: '4px', cursor: 'pointer' }}
         >
           Delete Page
         </button>
