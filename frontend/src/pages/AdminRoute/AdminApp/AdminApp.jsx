@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import PageEditor from "./components/PageEditor";
+import PageEditor from "./components/PageEditor/PageEditor";
 import { useAdminApp } from "./hooks/useAdminApp";
 import AdminHeader from "./components/AdminHeader";
 import PageList from "./components/PageList";
