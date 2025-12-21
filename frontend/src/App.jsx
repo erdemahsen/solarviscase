@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppRoute from './pages/AppRoute/AppRoute'
-import AdminRoute from './pages/AdminRoute/AdminRoute/AdminRoute';
+import AdminHome from './pages/AdminRoute/AdminHome/AdminHome';
 import AdminApp from './pages/AdminRoute/AdminApp/AdminApp';
 
 
@@ -14,7 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element = {<h1>This is the home path</h1>}/>
           <Route path="/app/1" element = {<AppRoute/>}/>
-          <Route path="/admin" element = {<AdminRoute/>}/>
+          <Route path="/admin" element = {<AdminHome/>}/>
           <Route path="/admin/:appId" element={<AdminApp />} />
           
         </Routes>

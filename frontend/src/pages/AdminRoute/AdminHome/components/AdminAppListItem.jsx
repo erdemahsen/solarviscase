@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../AdminRoute.module.css";
+import styles from "../AdminHome.module.css";
 
 function AdminAppListItem({ app, onDelete, onClick, onNavigationClick }) {
     return (

@@ -2,10 +2,10 @@ import { useNavigate } from "react-router-dom";
 import AdminAppList from "./components/AdminAppList";
 import { useApps } from "./hooks/useApps";
 
-import styles from "./AdminRoute.module.css";
+import styles from "./AdminHome.module.css";
 
 
-function AdminRoute() {
+function AdminHome() {
   const { apps, loading, error, addApp, removeApp } = useApps();
   const navigate = useNavigate();
 
@@ -47,7 +47,7 @@ function AdminRoute() {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className={styles.adminRouteContainer}>
+    <div className={styles.adminHomeContainer}>
       <div className={styles.adminHeader}>
         <h1>Admin - Apps</h1>
         <button onClick={() => alert("not implemented yet")} className="button actionButton">
@@ -68,4 +68,4 @@ function AdminRoute() {
   );
 }
 
-export default AdminRoute;
+export default AdminHome;
