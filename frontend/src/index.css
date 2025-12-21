@@ -1,6 +1,5 @@
-/* Add this to index.css */
-* {
-  box-sizing: border-box;
+*, *::before, *::after {
+    box-sizing: border-box;
 }
 
 #root {
