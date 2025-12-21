@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import PageCard from './components/PageCard';
+import PageCard from './components/PageCard/PageCard';
 import AppHeader from './components/AppHeader';
 import { useAppOverview } from './hooks/useAppOverview';
 import styles from './AppOverview.module.css';
