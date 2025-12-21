@@ -2,7 +2,7 @@ import React from "react";
 
 function AdminHeader({ appName, onSave, isDirty, onBack }) {
     return (
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <button onClick={onBack}>← Back</button>
             <h2>Editing: {appName}</h2>
             <button

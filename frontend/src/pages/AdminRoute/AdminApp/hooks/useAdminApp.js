@@ -112,6 +112,31 @@ export const useAdminApp = (appId) => {
         setIsDirty(true);
     };
 
+    const handleDeletePage = (pageUuid) => {
+        const newPages = appConfig.pages.filter((p) => p._uuid !== pageUuid);
+
+        // Update order indexes
+        const reorderedPages = newPages.map((p, index) => ({
+            ...p,
+            order_index: index,
+        }));
+
+        setAppConfig((prev) => ({
+            ...prev,
+            pages: reorderedPages,
+        }));
+
+        if (pageUuid === activePageUuid) {
+            if (reorderedPages.length > 0) {
+                setActivePageUuid(reorderedPages[0]._uuid);
+            } else {
+                setActivePageUuid(null);
+            }
+        }
+
+        setIsDirty(true);
+    };
+
     return {
         appConfig,
         loading,
@@ -120,6 +145,7 @@ export const useAdminApp = (appId) => {
         setActivePageUuid,
         handleSave,
         handleAddPage,
-        handleUpdatePage
+        handleUpdatePage,
+        handleDeletePage,
     };
 };

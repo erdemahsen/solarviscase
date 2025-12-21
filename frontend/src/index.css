@@ -1,10 +1,11 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+/* Add this to index.css */
+#root {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  /* Centers the AdminApp inside root */
+  align-items: center;
+  /* Centers vertically */
 }
 
 body {
@@ -13,9 +14,10 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  background-color: red;
 }
 
-.card{
+.card {
   display: flex;
   justify-content: center;
   align-items: center;

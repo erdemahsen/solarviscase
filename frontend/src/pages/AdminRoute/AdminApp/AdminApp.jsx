@@ -16,7 +16,8 @@ function AdminApp() {
     setActivePageUuid,
     handleSave,
     handleAddPage,
-    handleUpdatePage
+    handleUpdatePage,
+    handleDeletePage
   } = useAdminApp(appId);
 
   const onSaveClick = async () => {
@@ -32,8 +33,10 @@ function AdminApp() {
   if (!appConfig) return <p>App not found</p>;
 
   return (
-    <div style={{ padding: 20 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', }}>
       {/* HEADER */}
+
+
       <AdminHeader
         appName={appConfig.app_name}
         onSave={onSaveClick}
@@ -41,32 +44,22 @@ function AdminApp() {
         onBack={() => navigate("/admin")}
       />
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      {/* TOP: HORIZONTAL PAGE LIST */}
+      <PageList
+        pages={appConfig.pages}
+        activePageUuid={activePageUuid}
+        onSelectPage={setActivePageUuid}
+        onAddPage={handleAddPage}
+        onDeletePage={handleDeletePage}
+      />
 
-        {/* TOP: HORIZONTAL PAGE LIST */}
-        <PageList
-          pages={appConfig.pages}
-          activePageUuid={activePageUuid}
-          onSelectPage={setActivePageUuid}
-          onAddPage={handleAddPage}
-        />
-
-        {/* BOTTOM: MAIN EDITOR AREA */}
-        <div>
-          {activePageUuid ? (
-            <PageEditor
-              page={appConfig.pages.find(p => p._uuid === activePageUuid)}
-              onUpdate={handleUpdatePage}
-            />
-          ) : (
-            <div style={{ padding: 20, textAlign: 'center', color: '#888' }}>
-              <p>Select a page from the list above to edit details.</p>
-            </div>
-          )}
-        </div>
-
-      </div>
-    </div>
+      {/* BOTTOM: MAIN EDITOR AREA */}
+      <PageEditor
+        page={appConfig.pages.find(p => p._uuid === activePageUuid)}
+        onUpdatePage={handleUpdatePage}
+        onDeletePage={handleDeletePage}
+      />
+    </div >
   );
 }
 
