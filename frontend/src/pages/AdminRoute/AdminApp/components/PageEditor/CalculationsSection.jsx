@@ -26,10 +26,10 @@ function CalculationsSection({ calculations, onCalcChange, onAddCalc, onRemoveCa
                         placeholder="Unit (e.g. $)"
                         style={{ width: '120px' }}
                     />
-                    <button className={`${styles.button} ${styles.actionButton} ${styles.smallButton}`} onClick={() => onRemoveCalc(calc._uuid)}>×</button>
+                    <button className="button actionButton smallButton" onClick={() => onRemoveCalc(calc._uuid)}>×</button>
                 </div>
             ))}
-            <button onClick={onAddCalc} className={`${styles.button} ${styles.smallButton}`}>+ Add Calculation</button>
+            <button onClick={onAddCalc} className="button smallButton">+ Add Calculation</button>
         </>
     );
 }

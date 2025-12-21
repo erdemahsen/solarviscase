@@ -20,10 +20,10 @@ function InputsSection({ inputs, onInputChange, onAddInput, onRemoveInput }) {
                         placeholder="Variable Placeholder"
                         style={{ flex: 1 }}
                     />
-                    <button className={`${styles.button} ${styles.actionButton} ${styles.smallButton}`} onClick={() => onRemoveInput(input._uuid)}>×</button>
+                    <button className="button actionButton smallButton" onClick={() => onRemoveInput(input._uuid)}>×</button>
                 </div>
             ))}
-            <button onClick={onAddInput} className={`${styles.button} ${styles.smallButton}`}>+ Add Input Variable</button>
+            <button onClick={onAddInput} className="button smallButton">+ Add Input Variable</button>
         </>
     );
 }

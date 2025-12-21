@@ -52,7 +52,7 @@ function PageEditor({ page, onUpdatePage, onDeletePage }) {
 
       <div style={{ marginTop: '20px', borderTop: '1px solid #ddd', paddingTop: '10px' }}>
         <button
-          className={`${styles.button} ${styles.actionButton}`}
+          className="button actionButton"
           onClick={() => {
             if (window.confirm("Are you sure you want to delete this page?")) {
               onDeletePage(page._uuid);

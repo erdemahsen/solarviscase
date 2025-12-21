@@ -9,32 +9,7 @@
     height: 90vh;
 }
 
-.button {
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-    font-size: 14px;
-    transition: filter 0.2s;
-    background-color: var(--color-primary);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
-.button:hover {
-    filter: brightness(0.85);
-}
-
-.actionButton {
-    background-color: var(--color-secondary);
-}
-
-.smallButton {
-    padding: 5px;
-}
 
 .adminHeader {
     display: flex;
