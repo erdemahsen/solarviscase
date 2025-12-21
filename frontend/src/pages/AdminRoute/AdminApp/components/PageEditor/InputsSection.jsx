@@ -4,25 +4,26 @@ import styles from "../../AdminApp.module.css";
 function InputsSection({ inputs, onInputChange, onAddInput, onRemoveInput }) {
     return (
         <>
-            <h3>User Inputs</h3>
-            {inputs.length === 0 && <p>No inputs yet.</p>}
+            <h3>Input Variables</h3>
+            {inputs.length === 0 && <p>No inputs in this page.</p>}
 
             {inputs.map((input) => (
                 <div key={input._uuid} style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
                     <input
                         value={input.variable_name}
                         onChange={(e) => onInputChange(input._uuid, 'variable_name', e.target.value)}
-                        placeholder="Var Name (e.g. X)"
+                        placeholder="Variable Name (e.g. X)"
                     />
                     <input
                         value={input.placeholder || ""}
                         onChange={(e) => onInputChange(input._uuid, 'placeholder', e.target.value)}
-                        placeholder="Placeholder"
+                        placeholder="Variable Placeholder"
+                        style={{ flex: 1 }}
                     />
-                    <button onClick={() => onRemoveInput(input._uuid)} style={{ color: 'red' }}>×</button>
+                    <button className={`${styles.button} ${styles.actionButton} ${styles.smallButton}`} onClick={() => onRemoveInput(input._uuid)}>×</button>
                 </div>
             ))}
-            <button onClick={onAddInput} className={styles.button}>+ Add Input</button>
+            <button onClick={onAddInput} className={`${styles.button} ${styles.smallButton}`}>+ Add Input Variable</button>
         </>
     );
 }

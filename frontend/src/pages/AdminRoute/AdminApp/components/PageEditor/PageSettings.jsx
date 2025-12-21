@@ -4,7 +4,7 @@ function PageSettings({ page, onChange }) {
     return (
         <>
             <h3>Page Settings</h3>
-            <div style={{ marginBottom: 15 }}>
+            <div>
                 <label>Page Title:</label>
                 <input
                     name="title"

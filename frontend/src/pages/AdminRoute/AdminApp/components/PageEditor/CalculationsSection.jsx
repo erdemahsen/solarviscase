@@ -24,12 +24,12 @@ function CalculationsSection({ calculations, onCalcChange, onAddCalc, onRemoveCa
                         value={calc.unit || ""}
                         onChange={(e) => onCalcChange(calc._uuid, 'unit', e.target.value)}
                         placeholder="Unit (e.g. $)"
-                        style={{ width: '60px' }}
+                        style={{ width: '120px' }}
                     />
-                    <button onClick={() => onRemoveCalc(calc._uuid)} style={{ color: 'red' }}>×</button>
+                    <button className={`${styles.button} ${styles.actionButton} ${styles.smallButton}`} onClick={() => onRemoveCalc(calc._uuid)}>×</button>
                 </div>
             ))}
-            <button onClick={onAddCalc} className={styles.button}>+ Add Calc</button>
+            <button onClick={onAddCalc} className={`${styles.button} ${styles.smallButton}`}>+ Add Calculation</button>
         </>
     );
 }
