@@ -90,7 +90,7 @@ function PageEditor({ page, onUpdatePage, onDeletePage }) {
 
       {/* 2. Inputs Section */}
       <h3>User Inputs</h3>
-      {page.inputs.length === 0 && <p style={{ color: '#888' }}>No inputs yet.</p>}
+      {page.inputs.length === 0 && <p>No inputs yet.</p>}
 
       {page.inputs.map((input) => (
         <div key={input._uuid} style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
@@ -113,9 +113,6 @@ function PageEditor({ page, onUpdatePage, onDeletePage }) {
 
       {/* 3. Calculations Section */}
       <h3>Calculations</h3>
-      <p style={{ fontSize: '0.8em', color: '#666' }}>
-        Use variable names from above (e.g., <code>X * 2</code>)
-      </p>
 
       {page.calculations.map((calc) => (
         <div key={calc._uuid} style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
@@ -140,6 +137,7 @@ function PageEditor({ page, onUpdatePage, onDeletePage }) {
           <button onClick={() => removeCalc(calc._uuid)} style={{ color: 'red' }}>×</button>
         </div>
       ))}
+      <button onClick={addCalc} className={styles.button}>+ Add Calc</button>
       <div style={{ marginTop: '20px', borderTop: '1px solid #ddd', paddingTop: '10px' }}>
         <button
           className={`${styles.button} ${styles.actionButton}`}

@@ -1,4 +1,8 @@
 /* Add this to index.css */
+* {
+  box-sizing: border-box;
+}
+
 #root {
   width: 100%;
   display: flex;
