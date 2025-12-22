@@ -43,6 +43,7 @@ function AppOverview() {
                 handleInputChange={handleInputChange}
                 prevPage={prevPage}
                 nextPage={nextPage}
+                loading={loading}
                 isResultPage={isResultPage}
             />
         </div>

@@ -4,7 +4,7 @@ import InputsSection from './InputsSection';
 import ResultsSection from './ResultsSection';
 import ActionButtons from './ActionButtons';
 
-function PageCard({ pageConfig, results, formData, handleInputChange, prevPage, nextPage, isResultPage }) {
+function PageCard({ pageConfig, results, formData, handleInputChange, prevPage, nextPage, isResultPage, loading }) {
     const isFirstPage = pageConfig.order_index === 0
 
 
@@ -27,6 +27,7 @@ function PageCard({ pageConfig, results, formData, handleInputChange, prevPage, 
                 <ResultsSection
                     calculations={pageConfig.calculations}
                     results={results}
+                    loading={loading}
                 />
 
                 <ActionButtons

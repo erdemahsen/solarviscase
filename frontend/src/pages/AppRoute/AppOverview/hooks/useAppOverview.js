@@ -11,6 +11,7 @@ export function useAppOverview(appId) {
     const [backendResults, setBackendResults] = useState(null);
 
     const handleInputChange = (name, value) => {
+        setLoading(true);
         setFormData(prev => ({
             ...prev,
             [name]: value
