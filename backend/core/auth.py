@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
@@ -5,8 +7,10 @@ from passlib.context import CryptContext
 from . import database
 from .. import schemas, crud
 
+load_dotenv()
+
 # SECRET_KEY should be in env vars in production
-SECRET_KEY = "your-secret-key-keep-it-secret"
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 

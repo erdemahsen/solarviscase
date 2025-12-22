@@ -10,9 +10,13 @@ pip3 install simpleeval
 pip3 install python-multipart
 pip3 install "passlib[bcrypt]" # this might be unnecessary
 pip3 install "python-jose[cryptography]"
+pip3 install dotenv
 pip3 install argon2-cffi
 
-# pip install fastapi uvicorn sqlalchemy
+set up .env inside backend/ if you have not already : 
+/backend/.env: 
+SECRET_KEY = ...
+
 
 cd backend
 uvicorn main:app --reload  // not gonna work
