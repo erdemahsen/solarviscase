@@ -40,6 +40,9 @@ app.mount("/static", StaticFiles(directory="backend/static"), name="static")
 
 origins = [
     "http://localhost:5173",
+    # Add your production frontend URL here, e.g.:
+    # "https://your-app.vercel.app",
+    # "https://your-app.netlify.app",
 ]
 
 app.add_middleware(

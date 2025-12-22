@@ -1,8 +1,10 @@
 import axios from "axios";
 
 // Create a configured axios instance
+// Use environment variable for base URL, fallback to localhost for dev
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 const api = axios.create({
-    baseURL: "http://127.0.0.1:8000",
+    baseURL: baseURL,
 });
 
 // Request interceptor to add the auth token header to every request
