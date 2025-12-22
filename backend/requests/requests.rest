@@ -153,3 +153,16 @@ Content-Type: image/jpeg
 
 < ./solar-panel.jpg
 --boundary--
+
+### ============================================================================
+### 5. AUTHENTICATION
+### ============================================================================
+
+### Register User
+POST {{baseUrl}}/api/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}

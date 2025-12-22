@@ -20,7 +20,7 @@ function AppHome() {
     <div className={styles.appHomeContainer}>
       <div className={styles.appHeader}>
         <h1>User - Apps</h1>
-        <button onClick={() => alert("not implemented yet")} className="button actionButton">
+        <button onClick={() => navigate('/login')} className="button actionButton">
           Log in
         </button>
       </div>

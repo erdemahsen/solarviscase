@@ -8,6 +8,10 @@ pip3 install uvicorn
 pip3 install sqlalchemy
 pip3 install simpleeval
 pip3 install python-multipart
+pip3 install "passlib[bcrypt]" # this might be unnecessary
+pip3 install "python-jose[cryptography]"
+pip3 install argon2-cffi
+
 # pip install fastapi uvicorn sqlalchemy
 
 cd backend

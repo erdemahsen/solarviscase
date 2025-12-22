@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import styles from './Login.module.css';
 
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
+
+    const { login } = useAuth();
+    const navigate = useNavigate();
 
     const validate = () => {
         const newErrors = {};
@@ -28,11 +34,17 @@ function Login() {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setErrors({}); // Clear previous errors
         if (validate()) {
-            console.log('Login successful', { email, password });
-            alert('Login successful! (Check console for data)');
+            try {
+                await login(email, password);
+                navigate('/admin'); // Redirect to admin home on success
+            } catch (err) {
+                // The backend returns 401 on bad credentials
+                setErrors({ form: 'Invalid email or password' });
+            }
         }
     };
 
@@ -61,9 +73,9 @@ function Login() {
                             placeholder="Enter your password"
                         />
                     </div>
-                    {errors.email || errors.password ? (
+                    {errors.email || errors.password || errors.form ? (
                         <p className={styles.errorText}>
-                            {errors.email || errors.password}
+                            {errors.email || errors.password || errors.form}
                         </p>
                     ) : null}
                     <button type="submit" className='button' style={{ width: '100%' }}>

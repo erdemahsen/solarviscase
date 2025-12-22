@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
 import AdminAppList from "./components/AdminAppList";
 import { useApps } from "./hooks/useApps";
 
@@ -7,7 +8,13 @@ import styles from "./AdminHome.module.css";
 
 function AdminHome() {
   const { apps, loading, error, addApp, removeApp } = useApps();
+  const { logout } = useAuth();
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login'); // may be unnecessary idk
+  };
 
   /* -------------------- CREATE -------------------- */
   const handleCreateApp = async () => {
@@ -50,7 +57,7 @@ function AdminHome() {
     <div className={styles.adminHomeContainer}>
       <div className={styles.adminHeader}>
         <h1>Admin - Apps</h1>
-        <button onClick={() => alert("not implemented yet")} className="button actionButton">
+        <button onClick={handleLogout} className="button actionButton">
           Log out
         </button>
       </div>

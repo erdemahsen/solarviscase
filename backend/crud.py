@@ -190,3 +190,18 @@ def reconcile_calculations(db: Session, db_page: models.Page, calcs_data: List[s
     for calc_id, db_calc in existing_calcs.items():
         if calc_id not in incoming_ids:
             db.delete(db_calc)
+
+
+# ==========================================
+# 5. AUTH / USER CRUD
+# ==========================================
+
+def get_user_by_email(db: Session, email: str):
+    return db.query(models.User).filter(models.User.email == email).first()
+
+def create_user(db: Session, user: schemas.UserCreate, hashed_password: str):
+    db_user = models.User(email=user.email, hashed_password=hashed_password)
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
