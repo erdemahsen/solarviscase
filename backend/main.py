@@ -43,6 +43,7 @@ origins = [
     # Add your production frontend URL here, e.g.:
     # "https://your-app.vercel.app",
     # "https://your-app.netlify.app",
+    "https://solarviscasefrontend.onrender.com/"
 ]
 
 app.add_middleware(
