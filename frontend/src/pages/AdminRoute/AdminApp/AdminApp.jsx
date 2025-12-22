@@ -50,6 +50,7 @@ function AdminApp() {
         onDeletePage={handleDeletePage}
       />
       <PageEditor
+        key={activePageUuid}
         page={appConfig.pages.find(p => p._uuid === activePageUuid)}
         onUpdatePage={handleUpdatePage}
         onDeletePage={handleDeletePage}
