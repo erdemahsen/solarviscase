@@ -7,6 +7,7 @@
 
 ### Create the Main App
 # This initializes the app so you have an ID (usually 1) to attach pages to.
+# Need bear token
 POST {{baseUrl}}/api/app/
 Content-Type: application/json
 
@@ -21,6 +22,7 @@ Content-Type: application/json
 ### ============================================================================
 
 ### Update App Structure (Update, Create, and Delete in one go)
+# Need bear token
 PUT {{baseUrl}}/api/app/{{appId}}/
 Content-Type: application/json
 
