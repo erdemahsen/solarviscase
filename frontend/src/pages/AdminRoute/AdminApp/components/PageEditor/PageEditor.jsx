@@ -7,6 +7,8 @@ import CalculationsSection from "./CalculationsSection";
 function PageEditor({ page, onUpdatePage, onDeletePage }) {
   const {
     handleMainFieldChange,
+    handleImageUpload,
+    uploading,
     handleInputChange,
     addInput,
     removeInput,
@@ -30,6 +32,8 @@ function PageEditor({ page, onUpdatePage, onDeletePage }) {
       <PageSettings
         page={page}
         onChange={handleMainFieldChange}
+        onImageUpload={handleImageUpload}
+        uploading={uploading}
       />
 
       <hr />

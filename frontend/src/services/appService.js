@@ -19,6 +19,15 @@ const appService = {
     calculatePage: (appId, pageId, payload) => {
         return api.post(`/api/app/${appId}/pages/${pageId}/calculate`, payload);
     },
+    uploadImage: (file) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        return api.post("/api/upload", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+    },
 };
 
 export default appService;

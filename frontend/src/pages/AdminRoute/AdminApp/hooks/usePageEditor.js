@@ -1,10 +1,29 @@
+import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import appService from '../../../../services/appService';
 
 export const usePageEditor = (page, onUpdatePage) => {
+    const [uploading, setUploading] = useState(false);
 
     // --- HANDLERS FOR PAGE FIELDS ---
     const handleMainFieldChange = (e) => {
         onUpdatePage({ ...page, [e.target.name]: e.target.value });
+    };
+
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setUploading(true);
+        try {
+            const res = await appService.uploadImage(file);
+            onUpdatePage({ ...page, image_url: res.data.url });
+        } catch (err) {
+            console.error("Upload failed", err);
+            alert("Failed to upload image.");
+        } finally {
+            setUploading(false);
+        }
     };
 
     // --- HANDLERS FOR INPUTS ---
@@ -55,6 +74,8 @@ export const usePageEditor = (page, onUpdatePage) => {
 
     return {
         handleMainFieldChange,
+        handleImageUpload,
+        uploading,
         handleInputChange,
         addInput,
         removeInput,

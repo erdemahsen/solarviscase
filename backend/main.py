@@ -1,7 +1,11 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel 
 from typing import Dict, List, Any
+import shutil
+import os
+import uuid
 
 from sqlalchemy.orm import Session
 
@@ -15,6 +19,10 @@ models.Base.metadata.create_all(bind=database.engine)
 
 app = FastAPI()
 
+# Mount Static Files
+os.makedirs("backend/static/uploads", exist_ok=True)
+app.mount("/static", StaticFiles(directory="backend/static"), name="static")
+
 origins = [
     "http://localhost:5173",
 ]
@@ -26,6 +34,19 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Upload Endpoint
+@app.post("/api/upload")
+async def upload_file(file: UploadFile = File(...)):
+    # Generate a unique filename
+    file_extension = file.filename.split(".")[-1]
+    unique_filename = f"{uuid.uuid4()}.{file_extension}"
+    file_path = f"backend/static/uploads/{unique_filename}"
+    
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+        
+    return {"url": f"http://localhost:8000/static/uploads/{unique_filename}"}
 
 # API Health Check
 @app.get("/")

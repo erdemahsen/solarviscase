@@ -5,7 +5,7 @@ function ImageDisplay({ imageConfig }) {
     return (
         <div className={styles.imageContainer}>
             <img
-                src={testImage}
+                src={imageConfig.image_url || testImage}
                 alt={imageConfig.title}
                 className={styles.image}
             />
