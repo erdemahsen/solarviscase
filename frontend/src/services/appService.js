@@ -13,8 +13,8 @@ const appService = {
     getApp: (appId) => {
         return api.get(`/api/app/${appId}/`);
     },
-    updateAppStructure: (appId, payload) => {
-        return api.put(`/api/app/${appId}/structure`, payload);
+    updateApp: (appId, payload) => {
+        return api.put(`/api/app/${appId}/`, payload);
     },
     calculatePage: (appId, pageId, payload) => {
         return api.post(`/api/app/${appId}/pages/${pageId}/calculate`, payload);

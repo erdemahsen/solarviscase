@@ -1,6 +1,7 @@
 from typing import List, Set
 from sqlalchemy.orm import Session
 from . import models, schemas
+from .services import app_service
 
 # ==========================================
 # 1. APP CONFIG OPERATIONS
@@ -28,16 +29,22 @@ def delete_app(db: Session, app_id: int):
         db.commit()
     return db_app
 
-# ==========================================
-# 2. PAGE OPERATIONS 
-# ==========================================
+def update_app(db: Session, app_id: int, app_data: schemas.AppConfigUpdate):
+    db_app = get_app(db, app_id)
+    if not db_app:
+        return None
+
+    # 2. Reconcile App Structure (using service helper)
+    app_service.reconcile_app_structure(db, db_app, app_data)
+
+    db.commit()
+    db.refresh(db_app)
+    return db_app
 
 
-
 # ==========================================
-# 3. USER OPERATIONS
+# 2. PAGE CALCULATIONS 
 # ==========================================
-
 def get_page_calculations(db: Session, app_id: int, page_id: int):
     return (
         db.query(models.Calculation)
@@ -47,9 +54,8 @@ def get_page_calculations(db: Session, app_id: int, page_id: int):
         .all()
     )
 
-
 # ==========================================
-# 5. AUTH / USER CRUD
+# 3. AUTH / USER CRUD
 # ==========================================
 
 def get_user_by_email(db: Session, email: str):

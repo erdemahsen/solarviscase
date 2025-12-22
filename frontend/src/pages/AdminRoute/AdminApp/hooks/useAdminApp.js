@@ -66,7 +66,7 @@ export const useAdminApp = (appId) => {
         };
 
         try {
-            const res = await appService.updateAppStructure(appId, payload);
+            const res = await appService.updateApp(appId, payload);
             if (res.status === 200) {
                 setIsDirty(false);
                 return { success: true };

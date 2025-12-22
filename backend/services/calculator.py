@@ -17,8 +17,6 @@ def calculate_results(payload: Dict[str, Any], db_calculations: List[schemas.Cal
         except (ValueError, TypeError):
             user_inputs[key] = value
 
-    print("Sanitized inputs:", user_inputs) 
-
     results = []
     
     # 3. Calculate

@@ -18,7 +18,6 @@ engine = create_engine(
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # 4. THE BASE (The Catalog)
-# This is what you were asking about!
 # All your models (User, Page, AppConfig) inherit from this class.
 Base = declarative_base()
 

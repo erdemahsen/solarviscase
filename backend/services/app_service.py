@@ -6,17 +6,13 @@ from .. import models, schemas
 # APP CONFIG STRUCTURE UPDATE SERVICE
 # ==========================================
 
-def update_app_structure(db: Session, app_id: int, app_data: schemas.AppConfigUpdate):
+def reconcile_app_structure(db: Session, db_app: models.AppConfig, app_data: schemas.AppConfigUpdate):
     """
     Synchronizes the full app structure.
     Handles Updating existing items, Creating new ones, and Deleting missing ones.
+    Note: Just modifies the ORM objects. Persistence (commit/refresh) is handled by the caller.
     """
     
-    # 1. Fetch the existing App
-    db_app = db.query(models.AppConfig).filter(models.AppConfig.id == app_id).first()
-    if not db_app:
-        return None
-
     # 2. Update App-level fields
     db_app.app_name = app_data.app_name
 
@@ -63,10 +59,6 @@ def update_app_structure(db: Session, app_id: int, app_data: schemas.AppConfigUp
     for page_id, db_page in existing_pages.items():
         if page_id not in incoming_page_ids:
             db.delete(db_page)
-
-    db.commit()
-    db.refresh(db_app)
-    return db_app
 
 
 def _reconcile_inputs(db: Session, db_page: models.Page, inputs_data: List[schemas.InputVariableUpdate]):

@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 from typing import List
 from .. import database, schemas, crud
 from ..dependencies import get_current_user
-from ..services import app_service
 
 router = APIRouter()
 
@@ -35,18 +34,17 @@ def delete_app(
 ):
     return crud.delete_app(db=db, app_id=app_id)
 
-# --- THE BULK UPDATE ENDPOINT ---
-@router.put("/api/app/{app_id}/structure", response_model=schemas.AppConfig)
-def update_app_structure(
+@router.put("/api/app/{app_id}/", response_model=schemas.AppConfig)
+def update_app(
     app_id: int, 
     app_data: schemas.AppConfigUpdate, 
     db: Session = Depends(database.get_db),
     current_user: schemas.User = Depends(get_current_user)
 ):
     """
-    Updates the entire app structure using the app_service.
+    Updates the entire app structure using the crud.
     """
-    updated_app = app_service.update_app_structure(db=db, app_id=app_id, app_data=app_data)
+    updated_app = crud.update_app(db=db, app_id=app_id, app_data=app_data)
     if not updated_app:
         raise HTTPException(status_code=404, detail="App not found")
     return updated_app

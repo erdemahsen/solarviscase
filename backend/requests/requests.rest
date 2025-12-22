@@ -17,11 +17,11 @@ Content-Type: application/json
 
 
 ### ============================================================================
-### 5. BULK UPDATE (The Structure Endpoint)
+### 1. APP UPDATE (The Structure Endpoint)
 ### ============================================================================
 
 ### Update App Structure (Update, Create, and Delete in one go)
-PUT {{baseUrl}}/api/app/{{appId}}/structure
+PUT {{baseUrl}}/api/app/{{appId}}/
 Content-Type: application/json
 
 {
