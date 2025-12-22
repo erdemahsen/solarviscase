@@ -15,10 +15,17 @@ function ResultsSection({ calculations, results, loading }) {
 
                     return (
                         <div key={calcDef.output_name} className={styles.resultItem}>
-                            <span>{calcDef.output_name}:</span>
-                            <span style={{ fontWeight: 'bold' }}>
-                                {match.value} {calcDef.unit}
-                            </span>
+
+                            {match.value === "Error" ? 
+                                <span>There was an error calculating {calcDef.output_name}</span>: 
+                                <>
+                                <span>{calcDef.output_name}:</span>
+                                <span style={{ fontWeight: 'bold' }}>
+                                    {match.value} {calcDef.unit}
+                                </span>
+                                </>   
+                            }
+                            
                         </div>
                     );
                 })
