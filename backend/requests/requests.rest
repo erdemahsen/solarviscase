@@ -14,79 +14,7 @@ Content-Type: application/json
   "app_name": "My Solar Calc"
 }
 
-### ============================================================================
-### 1. PAGE CONFIGURATION (The "Nested Write" Endpoint)
-### ============================================================================
 
-### Create Page 1 (Energy Basics)
-# This page has 1 Input (X) and NO calculations.
-POST {{baseUrl}}/apps/{{appId}}/pages/
-Content-Type: application/json
-
-{
-  "title": "Energy Basics",
-  "description": "Tell us about your monthly bill.",
-  "image_url": "http://localhost:8000/static/solar-1.jpg",
-  "order_index": 0,
-  "inputs": [
-    {
-      "variable_name": "X",
-      "placeholder": "Monthly Bill ($)"
-    }
-  ],
-  "calculations": [
-    {
-      "output_name": "C",
-      "formula": "X-2",
-      "unit": "X ten iki çıkar"
-    }
-  ]
-}
-
-### Create Page 2 (Home Details & Calculations)
-# This page has 2 Inputs (Y, Z) AND defines the Formulas (A, B).
-POST {{baseUrl}}/apps/{{appId}}/pages/
-Content-Type: application/json
-
-{
-  "title": "Home Details",
-  "description": "Enter your roof dimensions.",
-  "image_url": "http://localhost:8000/static/solar-2.jpg",
-  "order_index": 1,
-  "calculations": [
-    {
-      "output_name": "A",
-      "formula": "2 * X",
-      "unit": "kWh"
-    },
-    {
-      "output_name": "B",
-      "formula": "6 * X / 3",
-      "unit": "meters"
-    }
-
-  ]
-}
-
-### ============================================================================
-### 2. RETRIEVAL & DELETION
-### ============================================================================
-
-### Get Full App Configuration
-# This checks if your "GET" is correctly returning the nested tree structure.
-GET {{baseUrl}}/api/app/
-
-### Get Full App Configuration
-# This checks if your "GET" is correctly returning the nested tree structure.
-GET {{baseUrl}}/api/app/{{appId}}/
-
-###
-DELETE  {{baseUrl}}/api/app/{{appId}}/
-
-
-### Delete a Page
-# Replace '1' with an actual page ID returned from the creation step
-DELETE {{baseUrl}}/apps/{{appId}}/pages/1
 
 ### ============================================================================
 ### 5. BULK UPDATE (The Structure Endpoint)
@@ -134,25 +62,6 @@ Content-Type: application/json
     }
   ]
 }
-
-
-
-### ============================================================================
-### 4. IMAGE UPLOAD
-### ============================================================================
-
-### Upload an Image
-# You will need to select a file from your computer when prompted
-# or specify the path explicitly if your REST client settings require it.
-POST {{baseUrl}}/upload
-Content-Type: multipart/form-data; boundary=boundary
-
---boundary
-Content-Disposition: form-data; name="file"; filename="solar-panel.jpg"
-Content-Type: image/jpeg
-
-< ./solar-panel.jpg
---boundary--
 
 ### ============================================================================
 ### 5. AUTHENTICATION
