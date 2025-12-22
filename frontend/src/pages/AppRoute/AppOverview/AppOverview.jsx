@@ -27,7 +27,6 @@ function AppOverview() {
 
     return (
         <div className={styles.appOverviewContainer}>
-            {loading && <div className={styles.loadingOverlay}>Calculating...</div>}
 
             <AppHeader
                 title={appConfig.app_name}
