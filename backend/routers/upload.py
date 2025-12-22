@@ -1,4 +1,4 @@
-from fastapi import APIRouter, File, UploadFile
+from fastapi import APIRouter, File, UploadFile, Request
 import shutil
 from ..core import database
 from .. import models, schemas
@@ -10,7 +10,7 @@ router = APIRouter()
 
 # Upload Endpoint
 @router.post("/api/upload")
-async def upload_file(file: UploadFile = File(...)):
+async def upload_file(request: Request, file: UploadFile = File(...)):
     # Generate a unique filename
     file_extension = file.filename.split(".")[-1]
     unique_filename = f"{uuid.uuid4()}.{file_extension}"
@@ -22,4 +22,5 @@ async def upload_file(file: UploadFile = File(...)):
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
         
-    return {"url": f"http://localhost:8000/static/uploads/{unique_filename}"}
+    # request.base_url returns the full URL including scheme and port (e.g. http://localhost:8001/ or https://myapp.onrender.com/)
+    return {"url": f"{str(request.base_url)}static/uploads/{unique_filename}"}
