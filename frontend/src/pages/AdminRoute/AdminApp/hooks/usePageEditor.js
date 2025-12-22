@@ -17,6 +17,7 @@ export const usePageEditor = (page, onUpdatePage) => {
         setUploading(true);
         try {
             const res = await appService.uploadImage(file);
+            // res.data.url is now "static/uploads/..."
             onUpdatePage({ ...page, image_url: res.data.url });
         } catch (err) {
             console.error("Upload failed", err);

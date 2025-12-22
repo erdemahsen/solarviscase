@@ -22,5 +22,6 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
         
-    # request.base_url returns the full URL including scheme and port (e.g. http://localhost:8001/ or https://myapp.onrender.com/)
-    return {"url": f"{str(request.base_url)}static/uploads/{unique_filename}"}
+    # Return the relative path, e.g. "static/uploads/uuid.jpeg"
+    # The frontend will prepend the backend base URL.
+    return {"url": f"static/uploads/{unique_filename}"}

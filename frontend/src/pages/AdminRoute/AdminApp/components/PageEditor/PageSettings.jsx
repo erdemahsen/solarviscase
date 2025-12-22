@@ -30,13 +30,6 @@ function PageSettings({ page, onChange, onImageUpload, uploading }) {
             <div style={{ marginBottom: 15 }}>
                 <label>Page Image:</label>
                 <br />
-                {page.image_url && (
-                    <img
-                        src={page.image_url}
-                        alt="Preview"
-                        style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '4px', marginBottom: '5px' }}
-                    />
-                )}
                 <div>
                     <input
                         type="file"
