@@ -89,7 +89,6 @@ class AppConfigBase(BaseModel):
 class AppConfigCreate(AppConfigBase):
     pass
 
-# NEW: The payload you send when clicking "Save"
 class AppConfigUpdate(AppConfigBase):
     pages: List[PageFullUpdate] = []
 

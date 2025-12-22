@@ -3,7 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
 
-from . import database, models
+from .core import database
+from . import models
 from .routers import auth, apps, calculations, upload
 
 # Create Tables

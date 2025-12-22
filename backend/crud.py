@@ -1,6 +1,7 @@
 from typing import List, Set
 from sqlalchemy.orm import Session
 from . import models, schemas
+from .core import auth
 from .services import app_service
 
 # ==========================================
