@@ -1,21 +1,23 @@
 import styles from '../../AppOverview.module.css';
 
-function ActionButtons({ prevPage, nextPage, isResultPage }) {
+function ActionButtons({ prevPage, nextPage, isFirstPage ,isResultPage }) {
+    console.log
     return (
         <div className={styles.actions}>
             <button
                 className="button actionButton"
                 onClick={prevPage}
                 disabled={!prevPage}
-                style={{ visibility: prevPage ? 'visible' : 'hidden' }}
+                style={{ visibility: isFirstPage ? 'hidden' : 'visible' }}
             >
-                Back
+                Previous
             </button>
             <button
                 className="button"
                 onClick={nextPage}
+                style={{ visibility: isResultPage ? 'hidden' : 'visible' }}
             >
-                {isResultPage ? "Finish" : "Next"}
+                Next
             </button>
         </div>
     );

@@ -5,6 +5,8 @@ import ResultsSection from './ResultsSection';
 import ActionButtons from './ActionButtons';
 
 function PageCard({ pageConfig, results, formData, handleInputChange, prevPage, nextPage, isResultPage }) {
+    const isFirstPage = pageConfig.order_index === 0
+
 
     return (
         <div className={styles.pageContentWrapper}>
@@ -30,6 +32,7 @@ function PageCard({ pageConfig, results, formData, handleInputChange, prevPage, 
                 <ActionButtons
                     prevPage={prevPage}
                     nextPage={nextPage}
+                    isFirstPage={isFirstPage}
                     isResultPage={isResultPage}
                 />
             </div>
