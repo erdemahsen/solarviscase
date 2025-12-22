@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Login.module.css';
 
 import { useNavigate } from 'react-router-dom';
@@ -9,8 +9,14 @@ function Login() {
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
 
-    const { login } = useAuth();
+    const { login, user, loading } = useAuth();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!loading && user) {
+            navigate('/admin');
+        }
+    }, [user, loading, navigate]);
 
     const validate = () => {
         const newErrors = {};
