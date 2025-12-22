@@ -4,6 +4,7 @@ import AppOverview from './pages/AppRoute/AppOverview/AppOverview'
 import AppHome from './pages/AppRoute/AppHome/AppHome';
 import AdminHome from './pages/AdminRoute/AdminHome/AdminHome';
 import AdminApp from './pages/AdminRoute/AdminApp/AdminApp';
+import Login from './pages/LoginRoute/Login';
 
 
 
@@ -18,6 +19,7 @@ function App() {
           <Route path="/app/:appId" element = {<AppOverview/>}/>
           <Route path="/admin" element = {<AdminHome/>}/>
           <Route path="/admin/:appId" element={<AdminApp />} />
+          <Route path="/login" element={<Login/>} />
           
         </Routes>
       </BrowserRouter>
