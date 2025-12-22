@@ -17,7 +17,7 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<h1>This is the home path</h1>} />
+          <Route path="/" element={<h1>This is the home path, try /login, /app or /admin</h1>} />
           <Route path="/login" element={<Login />} />
           <Route path="/app" element={<AppHome />}></Route>
           <Route path="/app/:appId" element={<AppOverview />} />
