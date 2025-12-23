@@ -32,7 +32,32 @@ try:
 finally:
     db.close()
 
-app = FastAPI()
+app = FastAPI(
+    title="Solarvis Case Study API",
+    description="API for managing apps, pages, and user access",
+    contact={
+        "name": "Ömer Erdem Ahsen",
+        "email": "omer.ahsen@metu.edu.tr",
+    },
+    openapi_tags=[
+        {
+            "name": "auth",
+            "description": "Handling user registrations, and logins.",
+        },
+        {
+            "name": "apps",
+            "description": "CRUD operations for apps",
+        },
+        {
+            "name": "calculation",
+            "description": "Calculating the formula",
+        },
+        {
+            "name": "upload",
+            "description": "Uploading images to be used by pages.",
+        },
+    ]
+)
 
 # Mount Static Files
 os.makedirs("backend/static/uploads", exist_ok=True)
@@ -55,11 +80,11 @@ app.add_middleware(
 )
 
 # Include Routers
-app.include_router(auth_router.router)
-app.include_router(apps.router)
-app.include_router(calculations.router)
-app.include_router(upload.router)
+app.include_router(auth_router.router, tags=["auth"])
+app.include_router(apps.router, tags=["apps"])
+app.include_router(calculations.router, tags=["calculation"])
+app.include_router(upload.router, tags=["upload"])
 
-@app.get("/")
+@app.get("/", summary="Health Check")
 def home():
     return "Home"

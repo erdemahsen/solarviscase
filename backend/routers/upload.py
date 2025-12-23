@@ -9,7 +9,11 @@ import os
 router = APIRouter()
 
 # Upload Endpoint
-@router.post("/api/upload")
+@router.post(
+    "/api/upload", 
+    summary="Upload a file",
+    description="Upload a file to the server. The file is saved with a unique filename, and the relative URL is returned like this: static/uploads/uuid.jpeg. This endpoint does not have a response model. Should've added that."
+)
 async def upload_file(request: Request, file: UploadFile = File(...)):
     # Generate a unique filename
     file_extension = file.filename.split(".")[-1]

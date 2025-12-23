@@ -7,7 +7,12 @@ from .. import schemas, crud
 
 router = APIRouter()
 
-@router.post("/api/register", response_model=schemas.User)
+@router.post(
+    "/api/register", 
+    response_model=schemas.User, 
+    summary="Register a new user",
+    description="Register a new user with email and password. Returns the created user information."
+)
 def register(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
@@ -15,7 +20,12 @@ def register(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
     hashed_password = auth.get_password_hash(user.password)
     return crud.create_user(db=db, user=user, hashed_password=hashed_password)
 
-@router.post("/api/token", response_model=schemas.Token)
+@router.post(
+    "/api/token", 
+    response_model=schemas.Token, 
+    summary="Login for access token",
+    description="Authenticate a user using OAuth2 form data (username as email, password) and return a JWT access token."
+)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(database.get_db)):
     # OAuth2 specifies "username" and "password" fields
     user = crud.get_user_by_email(db, form_data.username)
