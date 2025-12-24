@@ -17,9 +17,11 @@ def get_apps(skip: int = 0, limit: int = 100, db: Session = Depends(database.get
     apps = crud.get_apps(db, skip=skip, limit=limit)
     return apps
 
+# FastAPI identifies AppConfigCreate as payload. (thanks to schema provided)
+# Response schema is really important as well. It validates according to optional or required fields. Turns our db object to pydantic model according to schema.
 @router.post(
         "/api/app/", 
-        response_model=schemas.AppConfig, 
+        response_model=schemas.AppConfig,
         summary="Create a new app",
         description="Create a new application configuration. Requires the user to be authenticated."
         )

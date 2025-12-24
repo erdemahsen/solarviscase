@@ -68,3 +68,7 @@ def create_user(db: Session, user: schemas.UserCreate, hashed_password: str):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+# I do db.add(db_page1), db.add(db_page2), db.add(db_page3)
+# then db.commit pushes that commit to db
+# db.refresh(), goes to db checks out null fields add id's for example for newly created ones.

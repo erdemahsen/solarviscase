@@ -59,6 +59,7 @@ app = FastAPI(
     ]
 )
 
+# FastAPI creates a security boundary around this static folder. Everyone on internet can access 
 # Mount Static Files
 os.makedirs("backend/static/uploads", exist_ok=True)
 app.mount("/static", StaticFiles(directory="backend/static"), name="static")

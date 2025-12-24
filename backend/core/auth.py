@@ -16,6 +16,9 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
+# Do not mix password hashing to save in the db and JWT token stuff
+# This is irreversable hashing (argon2)
+# Still there are vulnerabilities. (argon is made specifically to act slow so brute force hash comparison does not work)
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 

@@ -28,3 +28,10 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+# SQLite is a file based database. There can be many readers, but if there is a write everyone else gets blocked.
+# PostgreSQL or MySQL locks only the row that is being changed.
+
+
+# Though we can do WAL in SQLite. With WAL, writers write to a seperate file then merged later. So readers are not blocked.

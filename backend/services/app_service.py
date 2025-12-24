@@ -106,3 +106,6 @@ def _reconcile_calculations(db: Session, db_page: models.Page, calcs_data: List[
     for calc_id, db_calc in existing_calcs.items():
         if calc_id not in incoming_ids:
             db.delete(db_calc)
+
+# use .model_dump(exclude={ instead, that is not deprecated
+# That exclude dict id makes sure you do not send that id, not even none. SQLAlchemy already handles that None but it is a best practice ig, to make sure it is %100 deleted

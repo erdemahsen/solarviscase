@@ -28,6 +28,7 @@ def register(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
 )
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(database.get_db)):
     # OAuth2 specifies "username" and "password" fields
+    # OAuth2PasswordRequestForm is like built-in pydantic model 
     user = crud.get_user_by_email(db, form_data.username)
     if not user or not auth.verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
